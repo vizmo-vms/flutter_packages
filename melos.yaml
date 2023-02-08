@@ -1,0 +1,9 @@
+name: packages
+
+repository: https://gitlab.com/vizmo/packages.git
+
+sdkPath: .fvm/flutter_sdk
+
+packages:
+  - vizmo_models
+  - vizmo_widgets
