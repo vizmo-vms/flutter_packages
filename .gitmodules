@@ -1,0 +1,3 @@
+[submodule "flutter/models"]
+	path = flutter/models
+	url = https://gitlab.com/vizmo/packages.git
