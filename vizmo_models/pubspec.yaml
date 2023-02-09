@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # parse
+  parse_server_sdk_flutter: ^3.1.0
+  rrule: ^0.2.10 #All provided DateTimes must be in UTC
 
 dev_dependencies:
   flutter_test:
