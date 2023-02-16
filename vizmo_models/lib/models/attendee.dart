@@ -1,9 +1,9 @@
 import 'package:contacts_service/contacts_service.dart';
-import 'package:vizmo_pass/app/data/models/location.dart';
-import 'package:vizmo_pass/app/data/models/parse_schemas/models.dart';
-import 'package:vizmo_pass/app/data/models/visitor.dart';
-import 'package:vizmo_pass/app/data/models/visitor_type.dart';
-import 'package:vizmo_pass/app/utils/validators.dart';
+import 'package:vizmo_models/models/location.dart';
+import 'package:vizmo_models/models/parse_schemas/models.dart';
+import 'package:vizmo_models/models/visitor.dart';
+import 'package:vizmo_models/models/visitor_type.dart';
+import 'package:vizmo_models/utils/validators.dart';
 
 import 'checkin_field.dart';
 import 'enum.dart';

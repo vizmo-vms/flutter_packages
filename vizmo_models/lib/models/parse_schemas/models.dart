@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:vizmo_pass/app/data/models/approval.dart';
-import 'package:vizmo_pass/app/data/models/health_declaration.dart';
-import 'package:vizmo_pass/app/data/models/host.dart';
-import 'package:vizmo_pass/app/data/models/parse_schemas/employee_schema.dart';
-import 'package:vizmo_pass/app/data/models/parse_schemas/visitor_type_schema.dart';
-import 'package:vizmo_pass/app/data/models/visitor_type.dart';
-import 'package:vizmo_pass/app/utils/extension_utils.dart';
-import 'package:vizmo_pass/app/utils/utils.dart';
+import 'package:vizmo_models/models/approval.dart';
+import 'package:vizmo_models/models/health_declaration.dart';
+import 'package:vizmo_models/models/host.dart';
+import 'package:vizmo_models/models/parse_schemas/employee_schema.dart';
+import 'package:vizmo_models/models/parse_schemas/visitor_type_schema.dart';
+import 'package:vizmo_models/models/visitor_type.dart';
+import 'package:vizmo_models/utils/extension_utils.dart';
+import 'package:vizmo_models/utils/utils.dart';
 
 import '../accept_reject.dart';
 import '../enum.dart';

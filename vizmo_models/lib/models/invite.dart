@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:rrule/rrule.dart';
-import 'package:vizmo_pass/app/modules/home/controllers/rruleL10n_controller.dart';
-import 'package:vizmo_pass/app/utils/extension_utils.dart';
-import 'package:vizmo_pass/app/utils/utils.dart';
-import 'package:vizmo_pass/app/data/models/attendee.dart';
-import 'package:vizmo_pass/app/data/models/checkin_field.dart';
-import 'package:vizmo_pass/app/data/models/host.dart';
+import 'package:vizmo_models/modules/home/controllers/rruleL10n_controller.dart';
+import 'package:vizmo_models/utils/extension_utils.dart';
+import 'package:vizmo_models/utils/utils.dart';
+import 'package:vizmo_models/models/attendee.dart';
+import 'package:vizmo_models/models/checkin_field.dart';
+import 'package:vizmo_models/models/host.dart';
 import 'package:collection/collection.dart';
 import 'accept_reject.dart';
 import 'approval.dart';

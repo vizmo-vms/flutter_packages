@@ -1,9 +1,9 @@
 import 'dart:io' show File;
 import 'dart:typed_data' show Uint8List;
 
-import 'package:vizmo_pass/app/data/models/approval.dart' show Approval;
-import 'package:vizmo_pass/app/data/models/visitor.dart' show Visitor;
-import 'package:vizmo_pass/app/data/models/visitor_type.dart' show VisitorType;
+import 'package:vizmo_models/models/approval.dart' show Approval;
+import 'package:vizmo_models/models/visitor.dart' show Visitor;
+import 'package:vizmo_models/models/visitor_type.dart' show VisitorType;
 
 import 'accept_reject.dart' show AcceptReject;
 import 'attendee.dart' show Attendee;

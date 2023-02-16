@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:ui';
 
-import 'package:vizmo_pass/app/data/models/approval.dart';
-import 'package:vizmo_pass/app/data/models/capacity_settings.dart';
-import 'package:vizmo_pass/app/utils/utils.dart';
+import 'package:vizmo_models/models/approval.dart';
+import 'package:vizmo_models/models/capacity_settings.dart';
+import 'package:vizmo_models/utils/utils.dart';
 
 class Settings {
   Settings({

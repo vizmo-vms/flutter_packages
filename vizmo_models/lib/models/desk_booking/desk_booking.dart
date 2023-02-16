@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:vizmo_pass/app/data/models/desk_booking/desk.dart';
-import 'package:vizmo_pass/app/data/models/host.dart';
-import 'package:vizmo_pass/app/data/models/invite.dart';
+import 'package:vizmo_models/models/desk_booking/desk.dart';
+import 'package:vizmo_models/models/host.dart';
+import 'package:vizmo_models/models/invite.dart';
 
 import '../parse_schemas/desk_booking/enum.dart' show DeskBookingStatus;
 

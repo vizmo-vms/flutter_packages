@@ -1,10 +1,9 @@
 import 'dart:io' show File;
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:vizmo_pass/app/data/models/parse_schemas/kiosk_schema.dart';
-import 'package:vizmo_pass/app/data/models/parse_schemas/location_schema.dart';
-import 'package:vizmo_pass/app/data/models/profile.dart';
-import 'package:vizmo_pass/app/data/providers/env.dart';
+import 'package:vizmo_models/models/parse_schemas/kiosk_schema.dart';
+import 'package:vizmo_models/models/parse_schemas/location_schema.dart';
+import 'package:vizmo_models/models/profile.dart';
 
 import 'company_schema.dart';
 
@@ -108,7 +107,7 @@ class UserSchema extends ParseUser implements ParseCloneable {
       lastName: this.lastName,
       email: this.email,
       phone: this.phone,
-      photo: this.photo?.url?.replaceFirst('localhost', Env().host),
+      photo: this.photo?.url,
       locations: this.locations.map((e) => e.toLocation()).toList(),
     );
   }

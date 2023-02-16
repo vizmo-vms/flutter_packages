@@ -1,7 +1,7 @@
 // import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-// import 'package:vizmo_pass/app/data/models/parse_schemas/company_schema.dart';
-// import 'package:vizmo_pass/app/data/models/parse_schemas/location_schema.dart';
-// import 'package:vizmo_pass/app/data/models/parse_schemas/user_schema.dart';
+// import 'package:vizmo_models/models/parse_schemas/company_schema.dart';
+// import 'package:vizmo_models/models/parse_schemas/location_schema.dart';
+// import 'package:vizmo_models/models/parse_schemas/user_schema.dart';
 
 // class RoleSchema extends ParseObject {
 //   RoleSchema() : super(_className);

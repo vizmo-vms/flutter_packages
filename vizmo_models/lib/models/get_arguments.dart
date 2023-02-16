@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:vizmo_pass/app/data/models/attendee.dart';
-import 'package:vizmo_pass/app/data/models/checkin_data.dart';
-import 'package:vizmo_pass/app/data/models/desk_booking/desk_booking.dart';
+import 'package:vizmo_models/models/attendee.dart';
+import 'package:vizmo_models/models/checkin_data.dart';
+import 'package:vizmo_models/models/desk_booking/desk_booking.dart';
 
 import 'desk_booking/desk.dart';
 import 'invite.dart';

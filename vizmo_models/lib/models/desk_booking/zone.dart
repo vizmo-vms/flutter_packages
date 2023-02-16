@@ -1,4 +1,4 @@
-import 'package:vizmo_pass/app/data/models/desk_booking/floor.dart';
+import 'package:vizmo_models/models/desk_booking/floor.dart';
 
 class DeskZone {
   final String? id;

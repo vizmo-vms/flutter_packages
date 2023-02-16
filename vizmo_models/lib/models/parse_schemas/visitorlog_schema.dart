@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:vizmo_pass/app/data/models/parse_schemas/visitor_schema.dart';
-import 'package:vizmo_pass/app/utils/extension_utils.dart';
-import 'package:vizmo_pass/app/utils/utils.dart';
+import 'package:vizmo_models/models/parse_schemas/visitor_schema.dart';
+import 'package:vizmo_models/utils/extension_utils.dart';
+import 'package:vizmo_models/utils/utils.dart';
 import '../checkin_data.dart';
 import '../checkin_field.dart';
 import '../enum.dart';

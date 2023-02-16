@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:vizmo_pass/app/data/models/role.dart';
-import 'package:vizmo_pass/app/data/models/settings.dart';
+import 'package:vizmo_models/models/role.dart';
+import 'package:vizmo_models/models/settings.dart';
 
 import 'location.dart';
 

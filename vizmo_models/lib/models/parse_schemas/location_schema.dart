@@ -1,5 +1,5 @@
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:vizmo_pass/app/data/models/location.dart';
+import 'package:vizmo_models/models/location.dart';
 
 import '../country.dart';
 import 'company_schema.dart';

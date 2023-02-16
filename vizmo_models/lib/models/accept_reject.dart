@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart' show describeEnum;
-import 'package:vizmo_pass/app/data/models/approval.dart';
+import 'package:vizmo_models/models/approval.dart';
 
 class AcceptReject extends Approval {
   AcceptReject() : super();

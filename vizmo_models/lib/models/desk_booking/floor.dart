@@ -1,4 +1,4 @@
-import 'package:vizmo_pass/app/data/models/parse_schemas/desk_booking/models.dart';
+import 'package:vizmo_models/models/parse_schemas/desk_booking/models.dart';
 
 class Floor {
   final String? id;

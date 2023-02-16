@@ -1,5 +1,4 @@
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:vizmo_pass/app/data/providers/env.dart';
 
 import '../settings.dart';
 import 'company_schema.dart';
@@ -45,20 +44,7 @@ class SettingsSchema extends ParseObject {
   }
 
   BrandingSettings get branding =>
-      BrandingSettings.fromMap((get<Map<String, dynamic>>(brandingKey) ?? {})
-        ..update(
-          'logo',
-          (value) {
-            if (value is ParseFile) {
-              final _url = value.url;
-
-              return _url?.replaceFirst(
-                  'localhost', Env().serverUrlEmu ?? 'localhost');
-            }
-            return value;
-          },
-          ifAbsent: () => null,
-        ));
+      BrandingSettings.fromMap((get<Map<String, dynamic>>(brandingKey) ?? {}));
   CheckinSettings get checkin =>
       CheckinSettings.fromMap(get<Map<String, dynamic>>(checkinKey) ?? {});
   CheckoutSettings get checkout =>

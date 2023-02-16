@@ -1,4 +1,4 @@
-import 'package:vizmo_pass/app/data/models/host.dart';
+import 'package:vizmo_models/models/host.dart';
 
 import 'checkin_field.dart';
 

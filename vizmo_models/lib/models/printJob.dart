@@ -1,5 +1,5 @@
-import 'package:vizmo_pass/app/data/models/parse_schemas/models.dart';
-import 'package:vizmo_pass/app/data/models/printer.dart';
+import 'package:vizmo_models/models/parse_schemas/models.dart';
+import 'package:vizmo_models/models/printer.dart';
 import 'checkin_data.dart';
 import 'enum.dart';
 

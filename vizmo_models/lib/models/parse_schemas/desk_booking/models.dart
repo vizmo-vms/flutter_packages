@@ -2,12 +2,12 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:vizmo_pass/app/data/models/desk_booking/floor.dart';
-import 'package:vizmo_pass/app/data/models/desk_booking/zone.dart';
+import 'package:vizmo_models/models/desk_booking/floor.dart';
+import 'package:vizmo_models/models/desk_booking/zone.dart';
 
-import 'package:vizmo_pass/app/data/models/parse_schemas/desk_booking/desk_schema.dart';
-import 'package:vizmo_pass/app/data/models/parse_schemas/desk_booking/enum.dart';
-import 'package:vizmo_pass/app/utils/extension_utils.dart';
+import 'package:vizmo_models/models/parse_schemas/desk_booking/desk_schema.dart';
+import 'package:vizmo_models/models/parse_schemas/desk_booking/enum.dart';
+import 'package:vizmo_models/utils/extension_utils.dart';
 
 import '../../desk_booking/desk.dart';
 
