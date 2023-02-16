@@ -7,7 +7,7 @@ enum InviteSource {
 enum RecurrencePatternType {
   day,
   week,
-  month,
+  // month,
 }
 
 enum RecurrenceRangeType {
@@ -42,6 +42,8 @@ enum PrinterInterface { BLUETOOTH, WIFI }
 /// call PrinterModel.QL720NW.describeEnum() to get the string representation of the enum.
 enum PrinterModel { QL720NW, QL820NWB }
 
-enum PrintJobStatus { pending, processing, success, error, cancelled }
+enum PrintJobStatus { pending, processing, success, error }
 
-enum PrintJobSource { vizmo, portal }
+enum PrintJobSource { dashboard, scheduler, api, touchless, kiosk }
+
+enum PlanCode { standard, premium, enterprise }

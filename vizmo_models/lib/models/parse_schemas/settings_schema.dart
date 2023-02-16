@@ -1,6 +1,7 @@
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:vizmo_models/models/settings.dart';
+import 'package:vizmo_pass/app/data/providers/env.dart';
 
+import '../settings.dart';
 import 'company_schema.dart';
 import 'location_schema.dart';
 
@@ -21,6 +22,7 @@ class SettingsSchema extends ParseObject {
   static const String notificationsKey = "notifications";
   static const String acceptRejectKey = "acceptReject";
   static const String healthDeclarationKey = "healthDeclaration";
+  static const String deskKey = "desk";
 
   CompanySchema? get company {
     var result = get(companyKey);
@@ -42,7 +44,7 @@ class SettingsSchema extends ParseObject {
     return LocationSchema()..fromJson(result);
   }
 
-  BrandingSettings branding(String host) =>
+  BrandingSettings get branding =>
       BrandingSettings.fromMap((get<Map<String, dynamic>>(brandingKey) ?? {})
         ..update(
           'logo',
@@ -50,7 +52,8 @@ class SettingsSchema extends ParseObject {
             if (value is ParseFile) {
               final _url = value.url;
 
-              return _url?.replaceFirst('localhost', host);
+              return _url?.replaceFirst(
+                  'localhost', Env().serverUrlEmu ?? 'localhost');
             }
             return value;
           },
@@ -69,18 +72,21 @@ class SettingsSchema extends ParseObject {
   HealthDeclarationSettings get healthDeclaration =>
       HealthDeclarationSettings.fromMap(
           get<Map<String, dynamic>>(healthDeclarationKey) ?? {});
+  DeskSettings get desk =>
+      DeskSettings.fromMap(get<Map<String, dynamic>>(deskKey) ?? {});
 
-  Settings toSettings(String host) {
+  Settings toSettings() {
     return new Settings(
       cid: this.company?.objectId,
       lid: this.location?.objectId,
       acceptRejectSettings: this.acceptReject,
-      branding: this.branding(host),
+      branding: this.branding,
       checkin: this.checkin,
       checkout: this.checkout,
       healthDeclarationSettings: this.healthDeclaration,
       inviteSettings: this.invite,
       notifications: this.notifications,
+      deskSettings: this.desk,
     );
   }
 }

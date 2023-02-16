@@ -1,6 +1,5 @@
-import 'package:vizmo_models/models/parse_schemas/models.dart'
-    show PrinterError;
 import 'enum.dart';
+import 'parse_schemas/models.dart';
 
 class Printer {
   String? key;
@@ -13,7 +12,9 @@ class Printer {
   String? bmac;
   String? wmac;
   String? ip;
+
   PrinterError? error;
+  PrintJobStatus? printStatus;
 
   Printer({
     this.key,
@@ -27,5 +28,6 @@ class Printer {
     this.wmac,
     this.ip,
     this.error,
+    this.printStatus,
   });
 }

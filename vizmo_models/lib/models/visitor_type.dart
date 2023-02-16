@@ -1,5 +1,4 @@
-import 'package:vizmo_models/models/host.dart';
-import 'package:vizmo_models/models/settings.dart';
+import 'package:vizmo_pass/app/data/models/host.dart';
 
 import 'checkin_field.dart';
 
@@ -20,7 +19,6 @@ class VisitorType {
     this.notifications,
     this.idCard,
     this.photo,
-    this.settingsOverrides,
   });
 
   final String? id;
@@ -38,7 +36,6 @@ class VisitorType {
   final Notifications? notifications;
   final IdCard? idCard;
   final Photo? photo;
-  final SettingsOverrides? settingsOverrides;
 
   factory VisitorType.fromMap(String? key, Map<String, dynamic> map) {
     return VisitorType(
@@ -58,12 +55,10 @@ class VisitorType {
           Notifications.fromMap(Map.from(map['notifications'] ?? {})),
       idCard: IdCard.fromMap(Map.from(map['idCard'] ?? {})),
       photo: Photo.fromMap(Map.from(map['photo'] ?? {})),
-      settingsOverrides:
-          SettingsOverrides.fromMap(Map.from(map['settingsOverrides'] ?? {})),
     );
   }
 
-  factory VisitorType.firebaseFromMap(
+  factory VisitorType.firebaseFromMap(String lid,
       {String? key, Map<String, dynamic>? map}) {
     if (map == null) map = {};
     final _general =
@@ -71,7 +66,8 @@ class VisitorType {
 
     return VisitorType(
       id: map['name'] ?? key,
-      name: map['name'],
+      name: map['name'] ?? key,
+      lid: lid,
       displayName: _general.typeName,
       enabled: _general.enabled,
       index: _general.index,
@@ -86,8 +82,6 @@ class VisitorType {
           Notifications.fromMap(Map.from(map['notifications'] ?? {})),
       idCard: IdCard.fromMap(Map.from(map['idCard'] ?? {})),
       photo: Photo.fromMap(Map.from(map['photo'] ?? {})),
-      settingsOverrides:
-          SettingsOverrides.fromMap(Map.from(map['settingsOverrides'] ?? {})),
     );
   }
 }
@@ -243,16 +237,6 @@ class IdCardType {
       'name': name,
     };
   }
-
-  @override
-  bool operator ==(covariant IdCardType other) {
-    if (identical(this, other)) return true;
-
-    return other.id == id;
-  }
-
-  @override
-  int get hashCode => id.hashCode ^ name.hashCode;
 }
 
 class Notifications {
@@ -323,39 +307,6 @@ class Photo {
       enabled: map['enabled'] ?? map['visitorPhoto'] ?? true,
       returningVisitorPhoto: map['returningVisitorPhoto'] ?? false,
       facialDetection: map['facialDetection'] ?? false,
-    );
-  }
-}
-
-class SettingsOverrides {
-  AcceptRejectSettings? acceptReject;
-  CheckinSettings? checkin;
-  CheckoutSettings? checkout;
-  HealthDeclarationSettings? healthDeclaration;
-
-  SettingsOverrides({
-    this.acceptReject,
-    this.checkin,
-    this.checkout,
-    this.healthDeclaration,
-  });
-
-  factory SettingsOverrides.fromMap(Map<String, dynamic> map) {
-    return SettingsOverrides(
-      acceptReject: map['acceptReject'] != null
-          ? AcceptRejectSettings.fromMap(
-              map['acceptReject'] as Map<String, dynamic>)
-          : null,
-      checkin: map['checkin'] != null
-          ? CheckinSettings.fromMap(map['checkin'] as Map<String, dynamic>)
-          : null,
-      checkout: map['checkout'] != null
-          ? CheckoutSettings.fromMap(map['checkout'] as Map<String, dynamic>)
-          : null,
-      healthDeclaration: map['healthDeclaration'] != null
-          ? HealthDeclarationSettings.fromMap(
-              map['healthDeclaration'] as Map<String, dynamic>)
-          : null,
     );
   }
 }

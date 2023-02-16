@@ -1,16 +1,16 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:vizmo_models/models/approval.dart';
-import 'package:vizmo_models/models/health_declaration.dart';
-import 'package:vizmo_models/models/host.dart';
-import 'package:vizmo_models/models/parse_schemas/employee_schema.dart';
-import 'package:vizmo_models/models/parse_schemas/visitor_type_schema.dart';
-import 'package:vizmo_models/utils/extension_utils.dart';
-import 'package:vizmo_models/utils/utils.dart';
+import 'package:vizmo_pass/app/data/models/approval.dart';
+import 'package:vizmo_pass/app/data/models/health_declaration.dart';
+import 'package:vizmo_pass/app/data/models/host.dart';
+import 'package:vizmo_pass/app/data/models/parse_schemas/employee_schema.dart';
+import 'package:vizmo_pass/app/data/models/parse_schemas/visitor_type_schema.dart';
+import 'package:vizmo_pass/app/data/models/visitor_type.dart';
+import 'package:vizmo_pass/app/utils/extension_utils.dart';
+import 'package:vizmo_pass/app/utils/utils.dart';
 
 import '../accept_reject.dart';
 import '../enum.dart';
-import '../visitor_type.dart';
 
 class ParseVisitorType {
   ParseVisitorType({
@@ -33,9 +33,11 @@ class ParseVisitorType {
 
   factory ParseVisitorType.fromMap(Map<String, dynamic> map) {
     return ParseVisitorType(
-      pointer: (map['pointer'] is ParseObject
-          ? VisitorTypeSchema.fromObject(map['pointer'])
-          : VisitorTypeSchema().fromJson(map['pointer'])),
+      pointer: map['pointer'] == null
+          ? null
+          : (map['pointer'] is ParseObject
+              ? VisitorTypeSchema.fromObject(map['pointer'])
+              : VisitorTypeSchema().fromJson(map['pointer'])),
       name: map['name'],
       displayName: map['displayName'],
     );
@@ -74,6 +76,9 @@ class ParseAcceptReject {
   }
 
   factory ParseAcceptReject.fromMap(Map<String, dynamic> map) {
+    if (!(map['enabled'] is bool)) {
+      map['enabled'] = false;
+    }
     return ParseAcceptReject(
       enabled: map['enabled'] ?? map['required'] ?? false,
       status: stringToEnum<AcceptRejectStatus>(
@@ -101,17 +106,12 @@ class ParseApproval {
   final EmployeeSchema? approver;
 
   Map<String, dynamic> toMap() {
-    final _map = {
+    return {
       'required': required,
       'status': status != null ? describeEnum(status!) : null,
       'message': message,
       'approver': approver?.toPointer(),
     };
-
-    if (_map['approver'] == null) {
-      _map.remove('approver');
-    }
-    return _map;
   }
 
   factory ParseApproval.fromMap(Map<String, dynamic> map) {
@@ -129,27 +129,14 @@ class ParseApproval {
 
   Approval toApproval() {
     return Approval(
-      required: this.required ?? false,
-      status: this.status,
-      message: this.message,
-      approver: (this.approver?.objectId?.isNotEmpty ?? false)
-          ? Approver(
-              uid: this.approver?.objectId,
-              name: this.approver?.user?.name,
-            )
-          : null,
-    );
-  }
-
-  factory ParseApproval.fromApproval(Approval approval) {
-    return ParseApproval(
-      required: approval.required,
-      approver: approval.approver?.uid?.isNotEmpty ?? false
-          ? (EmployeeSchema()..objectId = approval.approver?.uid)
-          : null,
-      status: approval.status,
-      message: approval.message,
-    );
+        required: this.required ?? false,
+        status: this.status,
+        approver: (this.approver?.objectId?.isNotEmpty ?? false)
+            ? Approver(
+                uid: this.approver?.objectId,
+                name: this.approver?.user?.name,
+              )
+            : null);
   }
 }
 
@@ -192,6 +179,15 @@ class ParseHost {
       name: map['name'],
       email: map['email'],
       phone: map['phone'],
+    );
+  }
+
+  factory ParseHost.fromHost(Host host) {
+    return ParseHost(
+      email: host.email,
+      name: host.name,
+      phone: host.phone,
+      pointer: EmployeeSchema()..objectId = host.uid,
     );
   }
 
@@ -266,9 +262,9 @@ class ParseAgreement {
   Map<String, dynamic> toMap() {
     return {
       'signedAt': signedAt,
-      'file': file, // we don't pass file from client
+      // 'file': file, // we don't pass file from client
       'content': content,
-    }..removeEmpty();
+    };
   }
 
   factory ParseAgreement.fromMap(Map<String, dynamic> map) {
@@ -276,42 +272,6 @@ class ParseAgreement {
       signedAt: Utils.getDateTime(map['signedAt']),
       file: map['file'],
       content: map['content'],
-    );
-  }
-}
-
-class PrintJobData {
-  String name;
-  String? companyName;
-  DateTime checkinAt;
-  String? hostName;
-  String purpose;
-  String? sessionToken;
-  String? visitorPhotoUrl;
-
-  PrintJobData({
-    required this.name,
-    this.companyName,
-    required this.checkinAt,
-    this.hostName,
-    required this.purpose,
-    this.visitorPhotoUrl,
-    this.sessionToken,
-  });
-
-  factory PrintJobData.fromMap(Map<String, dynamic> map) {
-    return PrintJobData(
-      name: map['name'] as String,
-      companyName:
-          map['companyName'] != null ? map['companyName'] as String : null,
-      checkinAt: Utils.parseDate(map['checkinAt']) ?? DateTime.now(),
-      hostName: map['hostName'] != null ? map['hostName'] as String : null,
-      purpose: map['purpose'] as String,
-      visitorPhotoUrl: map['visitorPhotoUrl'] != null
-          ? map['visitorPhotoUrl'] as String
-          : null,
-      sessionToken:
-          map['sessionToken'] != null ? map['sessionToken'] as String : null,
     );
   }
 }

@@ -1,13 +1,22 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:rrule/rrule.dart';
-import 'package:vizmo_models/models/attendee.dart';
-import 'package:vizmo_models/models/checkin_field.dart';
-import 'package:vizmo_models/models/host.dart';
-import 'package:vizmo_models/utils/extension_utils.dart';
+import 'package:vizmo_pass/app/modules/home/controllers/rruleL10n_controller.dart';
+import 'package:vizmo_pass/app/utils/extension_utils.dart';
+import 'package:vizmo_pass/app/utils/utils.dart';
+import 'package:vizmo_pass/app/data/models/attendee.dart';
+import 'package:vizmo_pass/app/data/models/checkin_field.dart';
+import 'package:vizmo_pass/app/data/models/host.dart';
 import 'package:collection/collection.dart';
-import 'package:vizmo_models/utils/utils.dart';
+import 'accept_reject.dart';
 import 'approval.dart';
 import 'enum.dart';
+
+final doNotRepeat = 'Do not repeat';
+final daily = 'Daily';
+final weekdays = 'Every weekday (Monday to Friday)';
+final weekday = 'Weekly on';
+final custom = 'Custom';
+final daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 class Invite {
   String? key;
@@ -51,7 +60,7 @@ class Invite {
 
   ///
   /// Visitor type name
-  /// not present incase only internal invitees are chosen
+  /// not present incase only internal attendees are chosen
   ///
   String? visitorType;
 
@@ -65,15 +74,15 @@ class Invite {
   /// visitor type id
   /// firebase: visitorType.name
   /// parse: visitorType.objectId
-  /// not present incase only internal invitees are chosen
+  /// not present incase only internal attendees are chosen
   ///
   String? visitorTypeKey;
 
   ///
-  /// internal invitees
+  /// internal attendees
   /// key for the record will be auto-generated
   ///
-  Map<String, Attendee?>? attendees;
+  Map<String, Attendee>? attendees;
 
   ///
   /// recurrence
@@ -84,9 +93,10 @@ class Invite {
 
   ///
   /// approval for invites
-  /// need to notify invitees when approved
+  /// need to notify attendees when approved
   ///
   Approval? approval;
+  AcceptReject? acceptReject;
 
   ///
   /// for backward compatibility
@@ -129,7 +139,12 @@ class Invite {
     this.visitorTypeDisplayName,
     this.cid,
     this.lid,
+    this.acceptReject,
   });
+
+  bool get isGroupInvite => (attendeeList.length) > 1;
+
+  List<Attendee> get attendeeList => attendees?.values.toList() ?? [];
 
   bool isValidInvite({String? inviteId, String? phone, String? email}) {
     final today = DateTime.now();
@@ -138,39 +153,57 @@ class Invite {
 
     if (this.recurrence?.isNotValidDay ?? false) return false;
 
-    final _invitee =
-        this.getAttendee(inviteeId: inviteId, phone: phone, email: email);
+    return true;
+  }
 
-    // if (_invitee?.healthDeclaration?.isNotApproved ?? false) return false;
+  bool isNotExpired() {
+    if ((this.acceptReject?.required ?? false) &&
+        this.acceptReject?.status != ApprovalStatus.accepted) return false;
 
-    if (!(this
-            .recurrence
-            ?.validNumberOfOccurrences(_invitee?.numberOfOccurrences ?? 0) ??
-        true)) return false;
+    if (!(this.recurrence?.range?.startDate?.currentDay() ?? false)) {
+      if (this.approval?.status == ApprovalStatus.rejected) return false;
+    }
+
+    final today = DateTime.now();
+    final date = DateTime(today.year, today.month, today.day);
+    if (this.recurrence?.range?.endDate?.isBefore(date) ?? false) return false;
 
     return true;
   }
 
-  bool isInternalInvitee({String? inviteeId, String? phone, String? email}) {
-    if (inviteeId != null) {
-      return this.attendees![inviteeId] != null;
+  bool isInternalAttendee({String? attendeeId, String? phone, String? email}) {
+    if (attendeeId != null) {
+      return this.attendees?[attendeeId]?.internal ?? false;
     } else
-      return this.attendees?.values.firstWhereOrNull((element) =>
-              element?.phone == phone || element?.email == email) !=
-          null;
+      return this
+              .attendees
+              ?.values
+              .firstWhereOrNull(
+                  (element) => element.phone == phone || element.email == email)
+              ?.internal ??
+          false;
   }
 
-  Attendee? getAttendee({String? inviteeId, String? phone, String? email}) {
-    if ((inviteeId?.isEmpty ?? true) &&
+  Attendee? getAttendee({String? attendeeId, String? phone, String? email}) {
+    if ((attendeeId?.isEmpty ?? true) &&
         (phone?.isEmpty ?? true) &&
         ((email?.isEmpty ?? true))) return null;
 
-    if (inviteeId != null) {
-      return this.attendees![inviteeId];
+    if (attendeeId != null) {
+      return this.attendees?[attendeeId];
     } else
       return this.attendees?.values.firstWhereOrNull((element) =>
-          ((phone?.isNotEmpty ?? false) && element?.phone == phone) ||
-          (((email?.isNotEmpty ?? false)) && element?.email == email));
+          ((phone?.isNotEmpty ?? false) && element.phone == phone) ||
+          (((email?.isNotEmpty ?? false)) && element.email == email));
+  }
+
+  Attendee? getIndividualAttendee() {
+    if (this.isGroupInvite) return null;
+
+    if (this.attendees?.isNotEmpty ?? false) {
+      return this.attendees?.values.first;
+    } else
+      return null;
   }
 }
 
@@ -182,19 +215,34 @@ class Recurrence {
     this.range,
   });
 
+  @override
+  String toString() {
+    final _rrule10n = RruleL10nController.to;
+    if (_rrule10n.l10n.value != null) {
+      final _text =
+          this.rrule().toText(l10n: _rrule10n.l10n.value!).replaceAllMapped(
+                RegExp(r' \d+:\d+:\d+ (PM|AM)'),
+                (match) => '',
+              );
+      return _text == 'Daily, once' ? doNotRepeat : _text;
+    } else
+      return '';
+  }
+
+  String? toText() {
+    final _rrule10n = RruleL10nController.to;
+    if (_rrule10n.l10n.value != null) {
+      return this.rrule().toString();
+    }
+
+    return null;
+  }
+
   DateTime? get validDay {
     final _instances = _getRRuleInstances() ?? [];
 
-    return _instances.firstWhereOrNull((instance) =>
-        instance?.calendarDate() == DateTime.now().calendarDate());
-  }
-
-  bool validNumberOfOccurrences(int occurrences) {
-    if (this.range?.type == RecurrenceRangeType.numbered) {
-      return occurrences < (this.range?.numberOfOccurrences ?? 0);
-    }
-
-    return true;
+    return _instances.firstWhereOrNull(
+        (instance) => instance.calendarDate() == DateTime.now().calendarDate());
   }
 
   bool get isNotValidDay => validDay == null;
@@ -204,18 +252,48 @@ class Recurrence {
 
     return _instances
         ?.firstWhereOrNull((instance) =>
-            instance?.calendarDate().isAfter(DateTime.now().calendarDate()) ??
-            false)
+            instance.calendarDate() == DateTime.now().calendarDate() ||
+            instance.calendarDate().isAfter(DateTime.now().calendarDate()))
         ?.calendarDate();
   }
 
-  Iterable<DateTime?>? _getRRuleInstances() {
+  bool isValidOnDay(DateTime date) {
+    final _instances = _getRRuleInstances();
+
+    return _instances?.any((instance) =>
+            instance.calendarDate().compareTo(date.calendarDate()) == 0) ??
+        false;
+  }
+
+  Iterable<DateTime>? _getRRuleInstances() {
+    DateTime _startDate = this.range?.startDate ?? DateTime.now().toUtc();
+    DateTime? _endDate = this.range?.endDate;
+
+    // if (this.range?.numberOfOccurrences == 1) {
+    //   return [_startDate.toLocal()];
+    // } else if (_startDate.calendarDate() == _endDate?.calendarDate()) {
+    //   return [_startDate.toLocal()];
+    // }
+
+    final _rrule = rrule();
+    return _rrule
+        .getInstances(
+          start: _startDate.isUtc ? _startDate : _startDate.toUtc(),
+          after: _startDate.isUtc ? _startDate : _startDate.toUtc(),
+          before: _endDate?.isUtc ?? true ? _endDate : _endDate?.toUtc(),
+          includeBefore: true,
+          includeAfter: true,
+        )
+        .map((e) => e.toLocal());
+  }
+
+  RecurrenceRule rrule() {
     Frequency _frequency;
     Set<ByWeekDayEntry> _byWeekDays = Set();
     int? _interval;
     int? _count;
     DateTime? _until;
-    DateTime _startDate;
+
     final _weeks = [
       DateTime.sunday,
       DateTime.monday,
@@ -237,20 +315,26 @@ class Recurrence {
         _frequency = Frequency.daily;
         break;
     }
-    _interval = this.pattern?.interval ?? 1;
+    _interval = this.pattern?.interval;
 
+    // if (this.range?.endDate != null) {
+    //   _until = this.range?.endDate?.isUtc ?? false
+    //       ? this.range?.endDate
+    //       : this.range?.endDate?.toUtc();
+    // } else {
     switch (this.range?.type) {
       case RecurrenceRangeType.numbered:
         _count = this.range?.numberOfOccurrences;
         break;
       case RecurrenceRangeType.endDate:
-        _until = this.range?.endDate;
+        _until = this.range?.endDate?.isUtc ?? false
+            ? this.range?.endDate
+            : this.range?.endDate?.toUtc();
         break;
       default:
         break;
     }
-
-    _startDate = this.range?.startDate ?? DateTime.now().toUtc();
+    // }
 
     return RecurrenceRule(
       frequency: _frequency,
@@ -258,15 +342,36 @@ class Recurrence {
       interval: _interval,
       count: _count,
       until: _until,
-    )
-        .getInstances(start: _startDate.isUtc ? _startDate : _startDate.toUtc())
-        .map((e) => e.toLocal().calendarDate());
+    );
+  }
+
+  List<DateTime> getValidDates() {
+    final _instances = _getRRuleInstances();
+
+    return _instances?.toList() ?? [];
   }
 
   Map<String, dynamic> toMap() {
     return {
       'pattern': pattern?.toMap(),
       'range': range?.toMap(),
+    };
+  }
+
+  Map<String, dynamic> toJson({bool showTime: false}) {
+    // if (range?.type == RecurrenceRangeType.numbered) {
+    //   range?.endDate = lastValidDay ?? range?.endDate;
+    // }
+    return {
+      'pattern': pattern?.toMap(),
+      'range': range?.toJson(showTime: showTime),
+    };
+  }
+
+  Map<String, dynamic> toJsonObject({bool showTime: false}) {
+    return {
+      'pattern': pattern?.toMap(),
+      'range': range?.toJsonObject(showTime: showTime),
     };
   }
 
@@ -338,10 +443,32 @@ class Range {
   Map<String, dynamic> toMap() {
     return {
       'type': type != null ? describeEnum(type!) : null,
-      'startDate': startDate?.millisecondsSinceEpoch,
+      'startDate': startDate,
       'numberOfOccurrences': numberOfOccurrences,
-      'endDate': endDate?.millisecondsSinceEpoch,
+      'endDate': endDate,
     };
+  }
+
+  Map<String, dynamic> toJson({bool showTime: false}) {
+    return {
+      'type': type != null ? describeEnum(type!) : null,
+      'startDate': showTime
+          ? startDate?.toUtc().toIso8601String()
+          : startDate?.toUtc().calendarDate().toIso8601String(),
+      'numberOfOccurrences': numberOfOccurrences,
+      'endDate': showTime
+          ? endDate?.toUtc().toIso8601String()
+          : endDate?.toUtc().calendarDate().toIso8601String(),
+    }..removeWhere((key, value) => value == null);
+  }
+
+  Map<String, dynamic> toJsonObject({bool showTime: false}) {
+    return {
+      'type': type != null ? describeEnum(type!) : null,
+      'startDate': startDate,
+      'numberOfOccurrences': numberOfOccurrences,
+      'endDate': endDate,
+    }..removeWhere((key, value) => value == null);
   }
 
   factory Range.fromMap(Map<String, dynamic> map) {

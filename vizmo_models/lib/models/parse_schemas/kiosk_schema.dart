@@ -1,9 +1,9 @@
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:vizmo_models/models/parse_schemas/user_schema.dart';
 
 import '../kiosk.dart';
 import 'company_schema.dart';
 import 'location_schema.dart';
+import 'user_schema.dart';
 
 class KioskSchema extends ParseObject {
   KioskSchema() : super(_className);
@@ -61,9 +61,9 @@ class KioskSchema extends ParseObject {
     if (result == null) return null;
 
     if (result is ParseUser) {
-      return UserSchema(null, null, null)..fromJson(result.toJson(full: true));
+      return UserSchema()..fromJson(result.toJson(full: true));
     }
-    return UserSchema(null, null, null)..fromJson(result);
+    return UserSchema()..fromJson(result);
   }
 
   bool? get paired => get<bool>(pairedKey);
@@ -97,7 +97,6 @@ class KioskSchema extends ParseObject {
       totpSecret: this.totpSecret,
       udid: this.udid,
       name: this.name,
-      online: this.online,
     );
   }
 

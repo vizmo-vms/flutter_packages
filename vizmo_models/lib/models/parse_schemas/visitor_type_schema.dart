@@ -28,7 +28,6 @@ class VisitorTypeSchema extends ParseObject {
   static const String notificationsKey = "notifications";
   static const String idCardKey = "idCard";
   static const String photoKey = "photo";
-  static const String settingsOverridesKey = "settingsOverrides";
 
   CompanySchema? get company {
     var result = get(companyKey);
@@ -73,12 +72,6 @@ class VisitorTypeSchema extends ParseObject {
       IdCard.fromMap(get<Map<String, dynamic>>(idCardKey) ?? _defaultIdCard);
   Photo get photo =>
       Photo.fromMap(get<Map<String, dynamic>>(photoKey) ?? _defaultPhoto);
-  SettingsOverrides? get settingsOverrides {
-    var map = get<Map<String, dynamic>>(settingsOverridesKey);
-    if (map?.isEmpty ?? true) return null;
-
-    return SettingsOverrides.fromMap(map!);
-  }
 
   VisitorType toVisitorType() {
     return VisitorType(
@@ -97,7 +90,6 @@ class VisitorTypeSchema extends ParseObject {
       notifications: this.notifications,
       idCard: this.idCard,
       photo: this.photo,
-      settingsOverrides: this.settingsOverrides,
     );
   }
 

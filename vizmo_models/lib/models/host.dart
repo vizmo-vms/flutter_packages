@@ -1,5 +1,5 @@
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:vizmo_models/models/parse_schemas/employee_schema.dart';
+import 'package:vizmo_pass/app/data/models/parse_schemas/employee_schema.dart';
 
 class Host {
   String? cid;
@@ -12,6 +12,7 @@ class Host {
   String? designation;
   String? firstName;
   String? lastName;
+  String? userId;
 
   Host({
     this.uid,
@@ -24,6 +25,7 @@ class Host {
     this.designation,
     this.firstName,
     this.lastName,
+    this.userId,
   }) : _name = name;
 
   String? get name {

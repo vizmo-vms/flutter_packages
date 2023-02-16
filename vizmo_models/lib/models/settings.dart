@@ -1,7 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:ui';
 
-import 'package:vizmo_models/models/approval.dart';
-import 'package:vizmo_models/utils/utils.dart';
+import 'package:vizmo_pass/app/data/models/approval.dart';
+import 'package:vizmo_pass/app/data/models/capacity_settings.dart';
+import 'package:vizmo_pass/app/utils/utils.dart';
 
 class Settings {
   Settings({
@@ -18,6 +20,8 @@ class Settings {
     this.createdAt,
     this.updatedAt,
     this.objectId,
+    this.employeePassSettings,
+    this.deskSettings,
   });
 
   String? cid;
@@ -30,7 +34,9 @@ class Settings {
   AcceptRejectSettings? acceptRejectSettings;
   HealthDeclarationSettings? healthDeclarationSettings;
   NotificationsSettings? notifications;
+  CapacitySettings? capacitySettings;
   EmployeePassSettings? employeePassSettings;
+  DeskSettings? deskSettings;
   DateTime? createdAt;
   DateTime? updatedAt;
   String? objectId;
@@ -48,6 +54,8 @@ class Settings {
         ),
         checkin = CheckinSettings.fromMap(
             Map<String, dynamic>.from(map['checkin'] ?? {})),
+        capacitySettings =
+            CapacitySettings.fromMap(Map.from(map['capacity'] ?? {})),
         employeePassSettings =
             EmployeePassSettings.fromMap(Map.from(map['employeePass'] ?? {}));
 
@@ -64,6 +72,8 @@ class Settings {
     );
     this.checkin = CheckinSettings.fromMap(
         Map<String, dynamic>.from(map['checkin'] ?? {}));
+    this.capacitySettings =
+        CapacitySettings.fromMap(Map.from(map['capacity'] ?? {}));
     this.employeePassSettings =
         EmployeePassSettings.fromMap(Map.from(map['employeePass'] ?? {}));
 
@@ -299,6 +309,16 @@ class HealthDeclarationSettings {
   final Approval? approval;
   final Redeclaration? redeclaration;
 
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'enabled': enabled,
+      'fields': fields?.map((x) => x?.toMap()).toList(),
+      'approval': approval?.toMap(),
+      'redeclaration': redeclaration?.toMap(),
+    };
+  }
+
   factory HealthDeclarationSettings.fromMap(Map<String, dynamic> map) {
     return HealthDeclarationSettings(
       title: map['title'],
@@ -369,78 +389,20 @@ class Redeclaration {
 }
 
 class InviteSettings {
-  InviteApprovalSetting approval;
-  InviteNotificationsSetting notifications;
+  bool shouldFillRequiredFields = false;
+  bool shouldSignAgreement = false;
+  bool shouldCaptureId = false;
+  bool shouldTakePhoto = false;
+  bool shouldExpire = true;
   bool enabled = false;
 
   InviteSettings.fromMap(Map<String, dynamic> map)
       : enabled = map['enabled'] ?? false,
-        notifications = InviteNotificationsSetting.fromMap(
-            Map.from(map['notifications'] ?? {})),
-        approval =
-            InviteApprovalSetting.fromMap(Map.from(map['approval'] ?? {}));
-}
-
-class InviteApprovalSetting {
-  Approver? approver;
-  _EnabledFor enabledFor;
-  InviteApprovalSetting({
-    required this.approver,
-    required this.enabledFor,
-  });
-
-  factory InviteApprovalSetting.fromMap(Map<String, dynamic> map) {
-    return InviteApprovalSetting(
-      approver:
-          map['approver'] == null ? null : Approver.parse(map['approver']),
-      enabledFor: _EnabledFor.fromMap(Map.from(map['enabledFor'] ?? {})),
-    );
-  }
-}
-
-class _EnabledFor {
-  bool? recurring;
-  bool? nonRecurring;
-  _EnabledFor({
-    this.recurring,
-    this.nonRecurring,
-  });
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'recurring': recurring,
-      'nonRecurring': nonRecurring,
-    };
-  }
-
-  factory _EnabledFor.fromMap(Map<String, dynamic> map) {
-    return _EnabledFor(
-      recurring: map['recurring'] != null ? map['recurring'] as bool : false,
-      nonRecurring:
-          map['nonRecurring'] != null ? map['nonRecurring'] as bool : false,
-    );
-  }
-}
-
-class InviteNotificationsSetting {
-  final bool? sms;
-  final bool? email;
-
-  InviteNotificationsSetting(this.sms, this.email);
-
-  // Map<String, dynamic> toMap() {
-  //   return <String, dynamic>{
-  //     'sms': sms,
-  //     'email': email,
-  //   };
-  // }
-
-  factory InviteNotificationsSetting.fromMap(Map<String, dynamic> map) {
-    return InviteNotificationsSetting(
-      map['sms'] != null ? map['sms'] as bool : false,
-      map['email'] != null ? map['email'] as bool : false,
-    );
-  }
+        shouldFillRequiredFields = map['shouldFillRequiredFields'] ?? false,
+        shouldSignAgreement = map['shouldSignAgreement'] ?? false,
+        shouldCaptureId = map['shouldCaptureId'] ?? false,
+        shouldTakePhoto = map['shouldTakePhoto'] ?? false,
+        shouldExpire = map['shouldExpire'] ?? true;
 }
 
 class NotificationsSettings {
@@ -471,6 +433,25 @@ class NotificationsSettings {
       sms: map['sms'],
       email: map['email'],
       push: map['push'],
+    );
+  }
+}
+
+class DeskSettings {
+  final bool enabled;
+  DeskSettings({
+    this.enabled: false,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'enabled': enabled,
+    };
+  }
+
+  factory DeskSettings.fromMap(Map<String, dynamic> map) {
+    return DeskSettings(
+      enabled: (map['enabled'] ?? false) as bool,
     );
   }
 }

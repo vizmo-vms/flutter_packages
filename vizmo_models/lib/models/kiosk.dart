@@ -7,7 +7,6 @@ class Kiosk {
   String? lid;
   String? totpSecret;
   String? name;
-  bool? online;
   Kiosk({
     this.kid,
     this.udid,
@@ -17,7 +16,6 @@ class Kiosk {
     this.lid,
     this.totpSecret,
     this.name,
-    this.online,
   });
 
   Map<String, dynamic> toMap() {
