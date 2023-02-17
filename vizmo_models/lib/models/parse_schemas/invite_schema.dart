@@ -1,12 +1,16 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:vizmo_models/models/invite.dart';
-import 'package:vizmo_models/models/parse_schema.dart';
-import 'package:vizmo_models/models/parse_schemas/models.dart';
+import 'package:vizmo_models/models/parse_schemas/visitor_type_schema.dart';
 import 'package:vizmo_models/utils/extension_utils.dart';
 
+import '../attendee.dart';
 import '../enum.dart';
+import '../invite.dart';
 import 'attendee_schema.dart';
+import 'company_schema.dart';
+import 'employee_schema.dart';
+import 'location_schema.dart';
+import 'models.dart';
 
 class InviteSchema extends ParseObject {
   InviteSchema({ParseHTTPClient? client}) : super(_className, client: client);
@@ -48,6 +52,9 @@ class InviteSchema extends ParseObject {
   static String startDateKey = 'recurrence.range.startDate';
 
   bool forApiRQ = true;
+  static String hostEmailKey = 'host.email';
+  static String hostidKey = 'host.id';
+  static String createdByEmailKey = 'createdBy.email';
 
   CompanySchema? get company {
     var result = get(companyKey);
@@ -136,7 +143,9 @@ class InviteSchema extends ParseObject {
   set attendees(List<AttendeeSchema>? attendees) => set<List>(
       attendeesKey,
       attendees
-              ?.map((e) => e.toJson(full: true, forApiRQ: forApiRQ))
+              ?.map((e) => (e.objectId?.isNotEmpty ?? false)
+                  ? e.toPointer()
+                  : e.toJson(full: true, forApiRQ: true))
               .toList() ??
           []);
 
@@ -202,26 +211,80 @@ class InviteSchema extends ParseObject {
     );
   }
 
-  // void fromInvite(Invite data, String cid, String lid) {
-  //   if (data == null) return;
+  Future<void> fromInvite(
+      Invite data, String cid, String lid, List<Attendee> attendees) async {
+    this.company = CompanySchema()..objectId = cid;
+    this.location = LocationSchema()..objectId = lid;
 
-  //   this.company = CompanySchema()..objectId = cid;
-  //   this.location = LocationSchema()..objectId = lid;
-  //   this.visitorType = ParseVisitorType(
-  //     pointer: VisitorTypeSchema()..objectId = data.visitorTypeKey,
-  //     name: data.visitorType,
-  //     displayName: data.visitorTypeDisplayName,
-  //   );
+    this.title = data.title ?? '${data.visitorTypeDisplayName} invite';
+    this.description = data.description;
+    this.comments = data.comments;
 
-  //   this.host = data.host != null
-  //       ? ParseHost(
-  //           pointer: EmployeeSchema()..objectId = data.host.uid,
-  //           name: data.host?.name,
-  //           email: data.host?.email,
-  //         )
-  //       : null;
+    // Invite update
+    // for invite update save attendees before updating invite
+    if (data.key?.isNotEmpty ?? false) {
+      final _futures = attendees.map((e) async {
+        if (e.id?.isEmpty ?? true) {
+          final _schema = AttendeeSchema()
+            ..company = this.company
+            ..location = this.location
+            ..firstName = e.firstName
+            ..lastName = e.lastName
+            ..email = e.email
+            ..phone = e.phone
+            ..companyName = e.companyName
+            ..photo = e.photo
+            ..type = e.type;
 
-  //   this.recurrence = data.recurrence;
+          final _res = await _schema.save();
+          if (_res.success) {
+            if (_res.result != null) {
+              return AttendeeSchema()..objectId = _res.result.objectId;
+            } else if (_res.results?.isNotEmpty ?? false) {
+              return AttendeeSchema()..objectId = _res.results?.first.objectId;
+            }
+          }
+          throw _res.error ??
+              'Error saving attendee ${e.firstName} ${e.lastName}';
+        } else
+          return AttendeeSchema()..objectId = e.id;
+      }).toList();
 
-  // }
+      this.attendees = await Future.wait(_futures);
+      return;
+    }
+
+    // for invite create send attendee as json
+    this.attendees = attendees
+        .map((e) => AttendeeSchema()
+          ..company = this.company
+          ..location = this.location
+          ..firstName = e.firstName
+          ..lastName = e.lastName
+          ..email = e.email
+          ..phone = e.phone
+          ..companyName = e.companyName
+          ..photo = e.photo
+          ..type = e.type)
+        .toList();
+
+    this.createdBy = ParseHost.fromHost(data.createdBy!);
+    this.source = SourceEnum.vizmopass;
+
+    this.visitorType = ParseVisitorType(
+      pointer: VisitorTypeSchema()..objectId = data.visitorTypeKey,
+      name: data.visitorType,
+      displayName: data.visitorTypeDisplayName,
+    );
+
+    this.host = data.host != null
+        ? ParseHost(
+            pointer: EmployeeSchema()..objectId = data.host?.uid,
+            name: data.host?.name,
+            email: data.host?.email,
+          )
+        : null;
+
+    this.recurrence = data.recurrence;
+  }
 }

@@ -81,9 +81,9 @@ class EmployeeSchema extends ParseObject {
     if (result == null) return null;
 
     if (result is ParseUser) {
-      return UserSchema(null, null, null)..fromJson(result.toJson(full: true));
+      return UserSchema()..fromJson(result.toJson(full: true));
     }
-    return UserSchema(null, null, null)..fromJson(result);
+    return UserSchema()..fromJson(result);
   }
 
   String? get slackId => get<String>(slackIdKey);
@@ -100,6 +100,7 @@ class EmployeeSchema extends ParseObject {
       phone: this.phone,
       department: this.department,
       designation: this.designation,
+      userId: this.user?.objectId,
     );
   }
 }

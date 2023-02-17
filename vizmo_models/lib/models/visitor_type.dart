@@ -71,7 +71,9 @@ class VisitorType {
 
     return VisitorType(
       id: map['name'] ?? key,
-      name: map['name'],
+      name: map['name'] ?? key,
+      //TODO:Needs to be reviewed
+      // lid: lid,
       displayName: _general.typeName,
       enabled: _general.enabled,
       index: _general.index,

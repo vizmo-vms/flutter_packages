@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:vizmo_models/utils/extension_utils.dart';
 
 enum ApprovalStatus {
+  accepted,
   approved,
   rejected,
   denied,
@@ -14,12 +16,22 @@ class Approval {
   // is approver uid.
   Approver? approver;
   String? message;
+  List<Approver> approvers;
   Approval({
     this.required,
     this.approver,
     this.status,
     this.message,
+    this.approvers: const [],
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'required': required ?? false,
+      'status': status != null ? describeEnum(status!) : null,
+      'approver': approver?.toMap(),
+    };
+  }
 
   factory Approval.fromMap(Map<String, dynamic>? map) {
     if (map?.isEmpty ?? true) map = {};
@@ -39,11 +51,23 @@ class Approval {
       status: stringToEnum(ApprovalStatus.values, map['status']),
       approver: _approver,
       message: map['message'] ?? map['comment'],
+      approvers: List.from(map['approvers'] ?? []).map((e) {
+        if (e is String) {
+          return Approver.fromMap({'uid': e}, isString: true);
+        } else {
+          return Approver.fromMap(Map.from(e ?? {}));
+        }
+      }).toList(),
     );
   }
 
   bool get isNotApproved =>
       (this.required ?? false) && this.status != ApprovalStatus.approved;
+
+  bool get isDenied =>
+      this.status == ApprovalStatus.no_response ||
+      this.status == ApprovalStatus.denied ||
+      this.status == ApprovalStatus.rejected;
 }
 
 class Approver {

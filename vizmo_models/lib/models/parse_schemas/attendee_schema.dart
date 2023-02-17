@@ -1,9 +1,9 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:vizmo_models/models/attendee.dart';
-import 'package:vizmo_models/models/checkin_data.dart';
 import 'package:vizmo_models/utils/extension_utils.dart';
 
+import '../checkin_data.dart';
 import '../checkin_field.dart';
 import '../enum.dart';
 import '../visitor_type.dart';
@@ -79,16 +79,19 @@ class AttendeeSchema extends ParseObject {
   // set name(String? name) => set<String?>(nameKey, name);
 
   String? get firstName => get<String?>(firstNameKey);
-  set firstName(String? firstName) => set<String?>(firstNameKey, firstName);
+  set firstName(String? firstName) =>
+      set<String?>(firstNameKey, firstName?.trim());
 
   String? get lastName => get<String?>(lastNameKey);
-  set lastName(String? lastName) => set<String?>(lastNameKey, lastName);
+  set lastName(String? lastName) => set<String?>(lastNameKey, lastName?.trim());
 
   String? get email => get<String?>(emailKey);
-  set email(String? email) => set<String?>(emailKey, email);
+  set email(String? email) =>
+      set<String?>(emailKey, (email?.isNotEmpty ?? false) ? email : null);
 
   String? get phone => get<String?>(phoneKey);
-  set phone(String? phone) => set<String?>(phoneKey, phone);
+  set phone(String? phone) =>
+      set<String?>(phoneKey, (phone?.isNotEmpty ?? false) ? phone : null);
 
   ParseFile? get photo => get<ParseFile?>(photoKey);
   set photo(ParseFile? photo) => set<ParseFile?>(photoKey, photo);
@@ -108,8 +111,8 @@ class AttendeeSchema extends ParseObject {
           healthDeclarationKey, healthDeclaration?.toMap());
 
   String? get companyName => get<String?>(companyNameKey);
-  set companyName(String? companyName) =>
-      set<String?>(companyNameKey, companyName);
+  set companyName(String? companyName) => set<String?>(
+      companyNameKey, (companyName?.isNotEmpty ?? false) ? companyName : null);
 
   ParseFile? get idCard => get<ParseFile?>(idCardKey);
   set idCard(ParseFile? idCard) => set<ParseFile?>(idCardKey, idCard);
@@ -144,7 +147,9 @@ class AttendeeSchema extends ParseObject {
       stringToEnum<InviteType>(InviteType.values, get<String?>(typeKey));
   set type(InviteType? type) => set<String?>(typeKey, describeEnum(type!));
 
-  void fromCheckinData(String cid, String lid, CheckinData checkinData) {
+  void fromCheckinData(
+      String cid, String lid, String attendeeId, CheckinData checkinData) {
+    this.objectId = attendeeId;
     this.company = CompanySchema()..objectId = cid;
     this.location = LocationSchema()..objectId = lid;
     this.firstName = checkinData.visitor?.firstName;
@@ -187,7 +192,6 @@ class AttendeeSchema extends ParseObject {
     return Attendee(
       cid: company?.objectId,
       lid: location?.objectId,
-      name: name,
       firstName: firstName,
       lastName: lastName,
       email: email,

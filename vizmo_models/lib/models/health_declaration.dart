@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show describeEnum;
 
 import 'approval.dart';
 
@@ -43,6 +43,9 @@ class HealthDeclaration {
       {this.temperature, this.fields, this.approval, this.declaredAt});
 
   bool get isRejected => this.approval?.status == ApprovalStatus.rejected;
+  bool get isNotApproved =>
+      (this.approval?.required ?? false) &&
+      this.approval?.status != ApprovalStatus.approved;
 
   bool get preFilled =>
       (this.fields?.isNotEmpty ?? false) &&

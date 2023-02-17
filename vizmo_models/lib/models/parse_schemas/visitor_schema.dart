@@ -5,6 +5,11 @@ import 'package:vizmo_models/models/visitor.dart';
 import '../visitor_type.dart';
 import 'company_schema.dart';
 import 'location_schema.dart';
+import 'package:vizmo_models/models/visitor.dart';
+
+import 'company_schema.dart';
+import 'location_schema.dart';
+import 'models.dart';
 
 class VisitorSchema extends ParseObject {
   VisitorSchema() : super(_className);
@@ -56,6 +61,7 @@ class VisitorSchema extends ParseObject {
   }
 
   set idCardType(IdCardType? value) => set(idCardTypeKey, value?.toMap());
+
   CompanySchema? get company {
     var result = get(companyKey);
     if (result == null) return null;
@@ -87,8 +93,12 @@ class VisitorSchema extends ParseObject {
       photo: this.photo,
       idCard: this.idCard,
       idType: this.idCardType,
-      agreementSigned: this.agreement?.file != null,
+      agreementSigned:
+          this.agreement?.signedAt != null && this.agreement?.file != null,
       agreement: this.agreement,
+      photoUri: this.photo?.url,
+      idUri: this.idCard?.url,
+      agreementUri: this.agreement?.file?.url,
       verified: this.phoneVerified,
     )..name = this.name;
   }

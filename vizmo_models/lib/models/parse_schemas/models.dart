@@ -1,16 +1,16 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:vizmo_models/models/approval.dart';
 import 'package:vizmo_models/models/health_declaration.dart';
 import 'package:vizmo_models/models/host.dart';
 import 'package:vizmo_models/models/parse_schemas/employee_schema.dart';
 import 'package:vizmo_models/models/parse_schemas/visitor_type_schema.dart';
+import 'package:vizmo_models/models/visitor_type.dart';
 import 'package:vizmo_models/utils/extension_utils.dart';
 import 'package:vizmo_models/utils/utils.dart';
 
 import '../accept_reject.dart';
 import '../enum.dart';
-import '../visitor_type.dart';
 
 class ParseVisitorType {
   ParseVisitorType({
@@ -33,9 +33,11 @@ class ParseVisitorType {
 
   factory ParseVisitorType.fromMap(Map<String, dynamic> map) {
     return ParseVisitorType(
-      pointer: (map['pointer'] is ParseObject
-          ? VisitorTypeSchema.fromObject(map['pointer'])
-          : VisitorTypeSchema().fromJson(map['pointer'])),
+      pointer: map['pointer'] == null
+          ? null
+          : (map['pointer'] is ParseObject
+              ? VisitorTypeSchema.fromObject(map['pointer'])
+              : VisitorTypeSchema().fromJson(map['pointer'])),
       name: map['name'],
       displayName: map['displayName'],
     );
@@ -74,6 +76,9 @@ class ParseAcceptReject {
   }
 
   factory ParseAcceptReject.fromMap(Map<String, dynamic> map) {
+    if (!(map['enabled'] is bool)) {
+      map['enabled'] = false;
+    }
     return ParseAcceptReject(
       enabled: map['enabled'] ?? map['required'] ?? false,
       status: stringToEnum<AcceptRejectStatus>(
@@ -101,17 +106,12 @@ class ParseApproval {
   final EmployeeSchema? approver;
 
   Map<String, dynamic> toMap() {
-    final _map = {
+    return {
       'required': required,
       'status': status != null ? describeEnum(status!) : null,
       'message': message,
       'approver': approver?.toPointer(),
     };
-
-    if (_map['approver'] == null) {
-      _map.remove('approver');
-    }
-    return _map;
   }
 
   factory ParseApproval.fromMap(Map<String, dynamic> map) {
@@ -195,6 +195,15 @@ class ParseHost {
     );
   }
 
+  factory ParseHost.fromHost(Host host) {
+    return ParseHost(
+      email: host.email,
+      name: host.name,
+      phone: host.phone,
+      pointer: EmployeeSchema()..objectId = host.uid,
+    );
+  }
+
   Host toHost() {
     return Host(
       uid: this.pointer?.objectId,
@@ -266,9 +275,9 @@ class ParseAgreement {
   Map<String, dynamic> toMap() {
     return {
       'signedAt': signedAt,
-      'file': file, // we don't pass file from client
+      // 'file': file, // we don't pass file from client
       'content': content,
-    }..removeEmpty();
+    };
   }
 
   factory ParseAgreement.fromMap(Map<String, dynamic> map) {

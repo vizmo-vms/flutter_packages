@@ -44,4 +44,6 @@ enum PrinterModel { QL720NW, QL820NWB }
 
 enum PrintJobStatus { pending, processing, success, error, cancelled }
 
-enum PrintJobSource { vizmo, portal }
+enum PrintJobSource { dashboard, scheduler, api, touchless, kiosk }
+
+enum PlanCode { standard, premium, enterprise }

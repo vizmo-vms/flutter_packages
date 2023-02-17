@@ -8,6 +8,11 @@ import 'package:vizmo_models/models/visitor_type.dart';
 import 'package:vizmo_models/utils/extension_utils.dart';
 import 'package:vizmo_models/utils/utils.dart';
 
+import 'package:flutter/foundation.dart' show describeEnum;
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:vizmo_models/models/parse_schemas/visitor_schema.dart';
+import 'package:vizmo_models/utils/extension_utils.dart';
+import 'package:vizmo_models/utils/utils.dart';
 import '../checkin_data.dart';
 import '../checkin_field.dart';
 import '../enum.dart';
@@ -16,6 +21,13 @@ import 'company_schema.dart';
 import 'employee_schema.dart';
 import 'kiosk_schema.dart';
 import 'location_schema.dart';
+import 'attendee_schema.dart';
+import 'company_schema.dart';
+import 'employee_schema.dart';
+import 'invite_schema.dart';
+import 'kiosk_schema.dart';
+import 'location_schema.dart';
+import 'models.dart';
 import 'visitor_type_schema.dart';
 
 class VisitorLogSchema extends ParseObject {
@@ -33,6 +45,7 @@ class VisitorLogSchema extends ParseObject {
   static const String visitorKey = "visitor";
   static const String visitorPointerKey = "visitor.pointer";
   static const String visitorPhoneKey = "visitor.phone";
+  static const String visitorEmailKey = "visitor.email";
   static const String visitorTypeKey = "visitorType";
   static const String hostKey = "host";
   static const String fieldsKey = "fields";
@@ -51,6 +64,10 @@ class VisitorLogSchema extends ParseObject {
   static const String approvalKey = "approval";
 
   static const String visitorTypePointerKey = "visitorType.pointer";
+  static const String hostEmailKey = "host.email";
+  static const String acceptRejectEnabledKey = "acceptReject.enabled";
+  static const String acceptRejectStatusKey = "acceptReject.status";
+  static const String approvalStatusKey = "approval.status";
 
   CompanySchema? get company {
     var result = get(companyKey);
@@ -102,7 +119,11 @@ class VisitorLogSchema extends ParseObject {
     return AttendeeSchema()..fromJson(result);
   }
 
-  set attendee(AttendeeSchema? value) => set(attendeeKey, value?.toPointer());
+  set attendee(AttendeeSchema? value) {
+    if (value != null) {
+      set(attendeeKey, value.toPointer());
+    }
+  }
 
   set invite(InviteSchema? value) {
     if (value != null) {
@@ -152,6 +173,7 @@ class VisitorLogSchema extends ParseObject {
   set checkinAt(DateTime? value) => set(checkinAtKey, value);
   DateTime? get checkoutAt => Utils.getDateTime(get(checkoutAtKey));
   set checkoutAt(DateTime? value) => set(checkoutAtKey, value);
+
   SourceEnum? get source =>
       stringToEnum<SourceEnum>(SourceEnum.values, get<String>(sourceKey));
   set source(SourceEnum? value) =>
@@ -239,10 +261,10 @@ class VisitorLogSchema extends ParseObject {
 
     // this.kiosk = KioskSchema()..objectId = kioskId;
     if ((data.iid?.isNotEmpty ?? false) &&
-        (data.inviteeId?.isNotEmpty ?? false)) {
+        (data.attendeeId?.isNotEmpty ?? false)) {
       this.invite = InviteSchema()..objectId = data.iid;
 
-      final _attendee = AttendeeSchema()..objectId = data.inviteeId;
+      final _attendee = AttendeeSchema()..objectId = data.attendeeId;
       // TODO: backend handles this
       // if (!(data.invitePreFilled ?? false)) {
       //   _attendee.fromCheckinData(cid, lid, data);
@@ -268,13 +290,18 @@ class VisitorLogSchema extends ParseObject {
       fields:
           this.fields?.asMap().map((key, value) => MapEntry(value.id, value)) ??
               {},
+      iid: this.invite?.objectId,
+      attendeeId: this.attendee?.objectId,
+      attendee: this.attendee?.toAttendee(),
+      visitor: visitor?.toVisitor(),
       host: host?.toHost(),
       checkinDate: checkinAt,
       checkoutDate: checkoutAt,
       visitorTypeKey: visitorType?.pointer?.objectId,
-      acceptReject: this.acceptReject?.toAcceptReject(),
-      approval: this.approval?.toApproval(),
-    );
+      healthDeclaration: healthDeclaration?.toHealthDeclaration(),
+      acceptReject: acceptReject?.toAcceptReject(),
+      approval: approval?.toApproval(),
+    )..visitor?.photo = this.photo;
   }
 }
 
@@ -314,6 +341,7 @@ class _Visitor {
     // this.agreement,
   });
 
+//TODO: implement visitor Schema
   VisitorSchema? pointer;
   String? name;
   String? firstName;
@@ -347,7 +375,9 @@ class _Visitor {
 
   factory _Visitor.fromMap(Map<String, dynamic> map) {
     return _Visitor(
-      pointer: VisitorSchema().fromJson(map['pointer'] ?? {}),
+      pointer: map['pointer'] is ParseObject
+          ? VisitorSchema.fromObject(map['pointer'] ?? {})
+          : VisitorSchema().fromJson(map['pointer'] ?? {}),
       name: map['name'],
       firstName: map['firstName'],
       lastName: map['lastName'],
@@ -357,7 +387,7 @@ class _Visitor {
     )..agreement = ParseAgreement.fromMap(map['agreement'] ?? {});
   }
 
-  Visitor toVisitors() {
+  Visitor toVisitor() {
     // has attributes
     if (this.pointer?.containsKey('phone') ?? false) {
       return this.pointer!.toVisitor();

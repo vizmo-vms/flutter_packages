@@ -1,5 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:vizmo_models/models/enum.dart';
+import 'package:get/get_utils/get_utils.dart';
+import 'dart:math' show min, max;
 
 T? stringToEnum<T>(List<T?> values, String? value, {T? defaultValue}) {
   if (value == null) {
@@ -29,7 +31,7 @@ extension ListUtils<E> on List<E> {
   ///
   ///defaults to '==' on the [value]
   ///set update = true to update existing
-  void addIfNotExists(E value,
+  void addIfNotExists(E? value,
       {bool Function(E)? predicate, bool update: true}) {
     if (value == null) return;
     final _index = this.indexWhere(predicate ?? (val) => val == value);
@@ -37,8 +39,7 @@ extension ListUtils<E> on List<E> {
     if (_index == -1) {
       this.add(value);
     } else if (_index > -1 && update) {
-      this.removeAt(_index);
-      this.insert(_index, value);
+      this[_index] = value;
     }
   }
 
@@ -71,6 +72,12 @@ extension CalendarDate on DateTime {
     return this.calendarDate().compareTo(day.calendarDate()) == 0;
   }
 
+  DateTime endOfDay() {
+    final day = this.add(Duration(days: 1)).subtract(Duration(seconds: 1));
+
+    return day;
+  }
+
   bool currentDay() {
     final day = DateTime.now();
     if (this.isUtc) {
@@ -78,6 +85,14 @@ extension CalendarDate on DateTime {
     } else {
       return this.calendarDate().compareTo(day.calendarDate()) == 0;
     }
+  }
+
+  bool isTodayOrTomorrow() {
+    return this.currentDay() || this.isTomorrow();
+  }
+
+  bool isSameDay(DateTime other) {
+    return this.calendarDate().compareTo(other.calendarDate()) == 0;
   }
 }
 
@@ -89,5 +104,14 @@ extension PrinterEnum on PrinterModel {
       case PrinterModel.QL820NWB:
         return 'QL-820NWB';
     }
+  }
+}
+
+extension DoubleUtils on double {
+  bool inBetween(double a, double b) {
+    final _min = min(a, b);
+    final _max = max(a, b);
+    if (this < _min || this > _max) return false;
+    return true;
   }
 }

@@ -12,6 +12,7 @@ class Host {
   String? designation;
   String? firstName;
   String? lastName;
+  String? userId;
 
   Host({
     this.uid,
@@ -24,6 +25,7 @@ class Host {
     this.designation,
     this.firstName,
     this.lastName,
+    this.userId,
   }) : _name = name;
 
   String? get name {
