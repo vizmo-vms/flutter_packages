@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart' show describeEnum;
+import 'package:get/state_manager.dart';
 import 'package:rrule/rrule.dart';
 
 import 'package:vizmo_models/utils/extension_utils.dart';
@@ -219,17 +220,15 @@ class Invite {
 class Recurrence {
   Pattern? pattern;
   Range? range;
-  Recurrence({
-    this.pattern,
-    this.range,
-  });
+  Rxn<RruleL10nEn> rrulel10;
+  Recurrence({this.pattern, this.range, required this.rrulel10});
 
   @override
   String toString() {
-    final _rrule10n = RruleL10nController.to;
-    if (_rrule10n.l10n.value != null) {
+    final _rrule10n = rrulel10;
+    if (_rrule10n.value != null) {
       final _text =
-          this.rrule().toText(l10n: _rrule10n.l10n.value!).replaceAllMapped(
+          this.rrule().toText(l10n: _rrule10n.value!).replaceAllMapped(
                 RegExp(r' \d+:\d+:\d+ (PM|AM)'),
                 (match) => '',
               );
@@ -239,8 +238,8 @@ class Recurrence {
   }
 
   String? toText() {
-    final _rrule10n = RruleL10nController.to;
-    if (_rrule10n.l10n.value != null) {
+    final _rrule10n = rrulel10;
+    if (_rrule10n.value != null) {
       return this.rrule().toString();
     }
 
@@ -383,11 +382,12 @@ class Recurrence {
     };
   }
 
-  factory Recurrence.fromMap(Map<String, dynamic> map) {
+  factory Recurrence.fromMap(
+      Map<String, dynamic> map, Rxn<RruleL10nEn> rrulel10) {
     return Recurrence(
-      pattern: Pattern.fromMap(map['pattern']),
-      range: Range.fromMap(map['range']),
-    );
+        pattern: Pattern.fromMap(map['pattern']),
+        range: Range.fromMap(map['range']),
+        rrulel10: rrulel10);
   }
 }
 
