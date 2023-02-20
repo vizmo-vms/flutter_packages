@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart' show describeEnum;
+import 'package:get/state_manager.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:rrule/rrule.dart';
 import 'package:vizmo_models/models/parse_schemas/visitor_type_schema.dart';
 import 'package:vizmo_models/utils/extension_utils.dart';
 
@@ -13,7 +15,9 @@ import 'location_schema.dart';
 import 'models.dart';
 
 class InviteSchema extends ParseObject {
-  InviteSchema({ParseHTTPClient? client}) : super(_className, client: client);
+  Rxn<RruleL10nEn>? rrulel10;
+  InviteSchema({ParseHTTPClient? client, this.rrulel10})
+      : super(_className, client: client);
 
   static InviteSchema fromObject(ParseObject object) {
     final InviteSchema _object =
@@ -116,8 +120,8 @@ class InviteSchema extends ParseObject {
   set visitorType(ParseVisitorType? type) =>
       set<Map<String, dynamic>?>(visitorTypeKey, type?.toMap());
 
-  Recurrence? get recurrence =>
-      Recurrence.fromMap(get<Map<String, dynamic>>(recurrenceKey) ?? {});
+  Recurrence? get recurrence => Recurrence.fromMap(
+      get<Map<String, dynamic>>(recurrenceKey) ?? {}, this.rrulel10!);
 
   set recurrence(Recurrence? recurrence) =>
       set<Map<String, dynamic>?>(recurrenceKey, recurrence?.toMap());

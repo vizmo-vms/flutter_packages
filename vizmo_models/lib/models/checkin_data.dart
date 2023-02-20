@@ -78,6 +78,5 @@ class CheckinData {
       this.iid,
       this.attendee,
       this.lid,
-      this.cid})
-      : fields = <String, CheckinField>{};
+      this.cid});
 }
