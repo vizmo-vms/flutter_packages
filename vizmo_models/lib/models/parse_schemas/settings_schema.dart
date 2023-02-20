@@ -43,7 +43,19 @@ class SettingsSchema extends ParseObject {
   }
 
   BrandingSettings get branding =>
-      BrandingSettings.fromMap((get<Map<String, dynamic>>(brandingKey) ?? {}));
+      BrandingSettings.fromMap((get<Map<String, dynamic>>(brandingKey) ?? {})
+        ..update(
+          'logo',
+          (value) {
+            if (value is ParseFile) {
+              final _url = value.url;
+
+              return _url;
+            }
+            return value;
+          },
+          ifAbsent: () => null,
+        ));
   CheckinSettings get checkin =>
       CheckinSettings.fromMap(get<Map<String, dynamic>>(checkinKey) ?? {});
   CheckoutSettings get checkout =>
