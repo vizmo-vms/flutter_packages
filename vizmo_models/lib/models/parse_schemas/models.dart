@@ -277,7 +277,7 @@ class ParseAgreement {
       'signedAt': signedAt,
       'file': file, // we don't pass file from client
       'content': content,
-    };
+    }..removeEmpty();
   }
 
   factory ParseAgreement.fromMap(Map<String, dynamic> map) {
