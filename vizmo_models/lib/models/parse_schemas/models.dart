@@ -275,7 +275,7 @@ class ParseAgreement {
   Map<String, dynamic> toMap() {
     return {
       'signedAt': signedAt,
-      // 'file': file, // we don't pass file from client
+      'file': file, // we don't pass file from client
       'content': content,
     };
   }
