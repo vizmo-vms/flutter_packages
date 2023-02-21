@@ -15,9 +15,7 @@ import 'location_schema.dart';
 import 'models.dart';
 
 class InviteSchema extends ParseObject {
-  Rxn<RruleL10nEn>? rrulel10;
-  InviteSchema({ParseHTTPClient? client, this.rrulel10})
-      : super(_className, client: client);
+  InviteSchema({ParseHTTPClient? client}) : super(_className, client: client);
 
   static InviteSchema fromObject(ParseObject object) {
     final InviteSchema _object =
@@ -120,8 +118,8 @@ class InviteSchema extends ParseObject {
   set visitorType(ParseVisitorType? type) =>
       set<Map<String, dynamic>?>(visitorTypeKey, type?.toMap());
 
-  Recurrence? get recurrence => Recurrence.fromMap(
-      get<Map<String, dynamic>>(recurrenceKey) ?? {}, this.rrulel10!);
+  Recurrence? get recurrence =>
+      Recurrence.fromMap(get<Map<String, dynamic>>(recurrenceKey) ?? {});
 
   set recurrence(Recurrence? recurrence) =>
       set<Map<String, dynamic>?>(recurrenceKey, recurrence?.toMap());

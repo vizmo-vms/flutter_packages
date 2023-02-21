@@ -220,26 +220,28 @@ class Invite {
 class Recurrence {
   Pattern? pattern;
   Range? range;
-  Rxn<RruleL10nEn> rrulel10;
-  Recurrence({this.pattern, this.range, required this.rrulel10});
+
+  Recurrence({
+    this.pattern,
+    this.range,
+  });
 
   @override
   String toString() {
-    final _rrule10n = rrulel10;
-    if (_rrule10n.value != null) {
-      final _text =
-          this.rrule().toText(l10n: _rrule10n.value!).replaceAllMapped(
-                RegExp(r' \d+:\d+:\d+ (PM|AM)'),
-                (match) => '',
-              );
+    final _rrule10n = Utils.rruleL10nEn;
+    if (_rrule10n != null) {
+      final _text = this.rrule().toText(l10n: _rrule10n).replaceAllMapped(
+            RegExp(r' \d+:\d+:\d+ (PM|AM)'),
+            (match) => '',
+          );
       return _text == 'Daily, once' ? doNotRepeat : _text;
     } else
       return '';
   }
 
   String? toText() {
-    final _rrule10n = rrulel10;
-    if (_rrule10n.value != null) {
+    final _rrule10n = Utils.rruleL10nEn;
+    if (_rrule10n != null) {
       return this.rrule().toString();
     }
 
@@ -383,11 +385,12 @@ class Recurrence {
   }
 
   factory Recurrence.fromMap(
-      Map<String, dynamic> map, Rxn<RruleL10nEn> rrulel10) {
+    Map<String, dynamic> map,
+  ) {
     return Recurrence(
-        pattern: Pattern.fromMap(map['pattern']),
-        range: Range.fromMap(map['range']),
-        rrulel10: rrulel10);
+      pattern: Pattern.fromMap(map['pattern']),
+      range: Range.fromMap(map['range']),
+    );
   }
 }
 

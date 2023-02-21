@@ -2,8 +2,10 @@ import 'package:flutter/material.dart' show ModalRoute, RouteObserver;
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:rrule/rrule.dart';
 
 class Utils {
+  static RruleL10nEn? rruleL10nEn;
   MethodChannel get vizmoChannel =>
       const MethodChannel('com.vizmo.vizmo/vizmo');
   static Uri get knowledgeBaseUrl => Uri.parse('https://help.vizmo.in');

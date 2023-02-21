@@ -71,7 +71,8 @@ class DeskBookingSchema extends ParseObject {
       set<Map<String, dynamic>?>(deskKey, desk?.toMap());
 
   Recurrence? get recurrence => Recurrence.fromMap(
-      get<Map<String, dynamic>>(recurrenceKey) ?? {}, this.rrulel10!);
+        get<Map<String, dynamic>>(recurrenceKey) ?? {},
+      );
 
   set recurrence(Recurrence? recurrence) =>
       set<Map<String, dynamic>?>(recurrenceKey, recurrence?.toMap());
