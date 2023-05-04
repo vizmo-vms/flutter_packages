@@ -1,6 +1,6 @@
 import 'dart:io' show File;
 
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:vizmo_models/models/parse_schemas/kiosk_schema.dart';
 import 'package:vizmo_models/models/parse_schemas/location_schema.dart';
 import 'package:vizmo_models/models/profile.dart';

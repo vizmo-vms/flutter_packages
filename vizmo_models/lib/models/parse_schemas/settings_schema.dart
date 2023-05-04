@@ -1,4 +1,4 @@
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:vizmo_models/models/settings.dart';
 import 'company_schema.dart';
 import 'location_schema.dart';

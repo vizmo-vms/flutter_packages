@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart' show describeEnum;
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:vizmo_models/models/parse_schemas/kiosk_schema.dart';
 import 'package:vizmo_models/models/parse_schemas/models.dart';
 import 'package:vizmo_models/utils/extension_utils.dart';

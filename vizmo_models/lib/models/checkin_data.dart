@@ -1,7 +1,7 @@
 import 'dart:io' show File;
 import 'dart:typed_data' show Uint8List;
 
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:vizmo_models/models/approval.dart' show Approval;
 import 'package:vizmo_models/models/parse_schemas/models.dart';
 import 'package:vizmo_models/models/visitor.dart' show Visitor;

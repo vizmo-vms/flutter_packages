@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:rrule/rrule.dart';
 import 'package:vizmo_models/models/desk_booking/desk.dart';
 import 'package:vizmo_models/models/desk_booking/desk_booking.dart';

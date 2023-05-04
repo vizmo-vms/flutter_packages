@@ -2,7 +2,7 @@
 // import 'dart:io';
 // import 'dart:typed_data';
 
-// import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+// import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 // import 'package:path/path.dart' as path;
 
 // class CustomParseFile extends ParseFileBase {

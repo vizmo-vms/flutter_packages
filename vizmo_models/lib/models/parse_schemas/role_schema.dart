@@ -1,4 +1,4 @@
-// import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+// import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart'er.dart';
 // import 'package:vizmo_models/models/parse_schemas/company_schema.dart';
 // import 'package:vizmo_models/models/parse_schemas/location_schema.dart';
 // import 'package:vizmo_models/models/parse_schemas/user_schema.dart';

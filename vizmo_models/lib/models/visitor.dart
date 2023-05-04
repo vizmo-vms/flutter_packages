@@ -1,4 +1,4 @@
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:vizmo_models/models/parse_schemas/models.dart';
 import 'package:vizmo_models/models/visitor_type.dart';
 // ignore_for_file: public_member_api_docs, sort_constructors_first

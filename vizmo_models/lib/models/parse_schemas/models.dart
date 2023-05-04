@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart' show describeEnum;
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:vizmo_models/models/approval.dart';
 import 'package:vizmo_models/models/health_declaration.dart';
 import 'package:vizmo_models/models/host.dart';

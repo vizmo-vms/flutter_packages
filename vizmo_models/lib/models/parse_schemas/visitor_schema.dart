@@ -1,7 +1,6 @@
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:vizmo_models/models/parse_schemas/models.dart';
 import 'package:vizmo_models/models/visitor.dart';
-
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import '../visitor_type.dart';
 import 'company_schema.dart';
 import 'location_schema.dart';

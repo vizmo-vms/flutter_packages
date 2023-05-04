@@ -1,4 +1,4 @@
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:vizmo_models/models/location.dart';
 import 'package:vizmo_models/models/parse_schemas/models.dart';
