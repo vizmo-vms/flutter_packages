@@ -1,4 +1,4 @@
-import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
+import 'package:flutter_libphonenumber/flutter_libphonenumber.dart' as libPhone;
 
 class Validators {
   Validators._();
@@ -41,7 +41,7 @@ class Validators {
     if (val.isEmpty) return "Phone no. can't be empty";
 
     try {
-      final parsed = await FlutterLibphonenumber().parse(
+      final parsed = await libPhone.parse(
           '${val.startsWith(RegExp(r'(0|\+)')) ? '' : dialingCode}$val',
           region: region);
 
