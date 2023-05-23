@@ -17,7 +17,7 @@ class AcceptReject extends Approval {
 
   Map<String, dynamic> toMap() {
     return {
-      'enabled': this.required,
+      'required': this.required,
       'status': status != null ? describeEnum(status!) : null,
       'approver': approver?.toMap(),
     };
