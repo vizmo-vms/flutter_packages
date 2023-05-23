@@ -3,6 +3,7 @@ import 'package:vizmo_models/models/parse_schemas/models.dart'
 import 'enum.dart';
 import 'enum.dart';
 import 'parse_schemas/models.dart';
+import 'package:another_brother/printer_info.dart' as another;
 
 class Printer {
   String? key;
@@ -33,4 +34,18 @@ class Printer {
     this.error,
     this.printStatus,
   });
+  another.Model getModel() {
+    switch (this.model) {
+      case 'QL-720NW':
+        return another.Model.QL_720NW;
+      case 'QL-810W':
+        return another.Model.QL_810W;
+      case 'QL-820NWB':
+        return another.Model.QL_820NWB;
+      default:
+        return another.Model.getValues().firstWhere(
+            (e) => e.getName() == this.model,
+            orElse: () => another.Model.QL_820NWB);
+    }
+  }
 }
