@@ -104,10 +104,11 @@ class PrinterSchema extends ParseObject {
     return stringToEnum(PrinterInterface.values, _val);
   }
 
-  PrinterModel? get model {
+  String? get model {
     final _val = get<String>(modelKey);
     if (_val?.isEmpty ?? true) return null;
-    return stringToEnum<PrinterModel>(PrinterModel.values, _val);
+    return _val;
+    // return stringToEnum<PrinterModel>(PrinterModel.values, _val);
   }
 
   String? get ip => get<String>(ipKey);

@@ -11,7 +11,7 @@ class Printer {
   String? lid;
   String? name;
   PrinterStatus? status;
-  PrinterModel? model;
+  String? model;
   PrinterInterface? interface;
   String? bmac;
   String? wmac;
@@ -35,7 +35,7 @@ class Printer {
     this.printStatus,
   });
   another.Model getModel() {
-    switch (this.model) {
+    switch (model) {
       case 'QL-720NW':
         return another.Model.QL_720NW;
       case 'QL-810W':
