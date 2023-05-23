@@ -225,6 +225,13 @@ class Recurrence {
     this.pattern,
     this.range,
   });
+  bool validNumberOfOccurrences(int occurrences) {
+    if (this.range?.type == RecurrenceRangeType.numbered) {
+      return occurrences < (this.range?.numberOfOccurrences ?? 0);
+    }
+
+    return true;
+  }
 
   @override
   String toString() {
