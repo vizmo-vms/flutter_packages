@@ -3,6 +3,8 @@ import 'package:vizmo_models/models/enum.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'dart:math' show min, max;
 
+import '../models/host.dart';
+
 T? stringToEnum<T>(List<T?> values, String? value, {T? defaultValue}) {
   if (value == null) {
     return null;
@@ -39,7 +41,12 @@ extension ListUtils<E> on List<E> {
     if (_index == -1) {
       this.add(value);
     } else if (_index > -1 && update) {
-      this[_index] = value;
+      if (value is Host?) {
+        (this.elementAt(_index) as Host?)?.copyWithHost(value as Host?);
+      } else {
+        this.removeAt(_index);
+        this.insert(_index, value);
+      }
     }
   }
 

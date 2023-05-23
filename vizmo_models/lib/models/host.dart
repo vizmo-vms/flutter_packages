@@ -13,20 +13,22 @@ class Host {
   String? firstName;
   String? lastName;
   String? userId;
+  bool? hide;
 
-  Host({
-    this.uid,
-    String? name,
-    this.email,
-    this.cid,
-    this.lid,
-    this.phone,
-    this.department,
-    this.designation,
-    this.firstName,
-    this.lastName,
-    this.userId,
-  }) : _name = name;
+  Host(
+      {this.uid,
+      String? name,
+      this.email,
+      this.cid,
+      this.lid,
+      this.phone,
+      this.department,
+      this.designation,
+      this.firstName,
+      this.lastName,
+      this.userId,
+      this.hide})
+      : _name = name;
 
   String? get name {
     if (_name?.isNotEmpty ?? false) return _name;
@@ -71,5 +73,14 @@ class Host {
     }
 
     return Host();
+  }
+  void copyWithHost(Host? host) {
+    email = host?.email ?? email;
+    phone = host?.phone ?? phone;
+    department = host?.department ?? department;
+    designation = host?.designation ?? designation;
+    firstName = host?.firstName ?? firstName;
+    lastName = host?.lastName ?? lastName;
+    hide = host?.hide ?? hide;
   }
 }
