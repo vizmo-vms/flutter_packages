@@ -5,13 +5,16 @@ import 'package:vizmo_models/models/invite.dart';
 
 import '../parse_schemas/desk_booking/enum.dart' show DeskBookingStatus;
 
+import '../parse_schemas/desk_booking/enum.dart' show DeskBookingStatus;
+import '../parse_schemas/models.dart';
+
 class DeskBooking {
   final String? id;
   final String? cid;
   final String? lid;
   final Desk? desk;
   final Recurrence? recurrence;
-  final Host? createdBy;
+  final ParseHost? createdBy;
   final Host? assignedTo;
   final DeskBookingStatus? status;
 

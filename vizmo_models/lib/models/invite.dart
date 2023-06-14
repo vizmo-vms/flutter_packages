@@ -220,11 +220,13 @@ class Invite {
 class Recurrence {
   Pattern? pattern;
   Range? range;
-
+  final DateTime? nextOccurrenceAt;
   Recurrence({
     this.pattern,
     this.range,
+    this.nextOccurrenceAt,
   });
+
   bool validNumberOfOccurrences(int occurrences) {
     if (this.range?.type == RecurrenceRangeType.numbered) {
       return occurrences < (this.range?.numberOfOccurrences ?? 0);
@@ -256,6 +258,13 @@ class Recurrence {
   }
 
   DateTime? get validDay {
+    if (this.nextOccurrenceAt != null) {
+      return this.nextOccurrenceAt?.calendarDate() ==
+              DateTime.now().calendarDate()
+          ? this.nextOccurrenceAt
+          : null;
+    }
+
     final _instances = _getRRuleInstances() ?? [];
 
     return _instances.firstWhereOrNull(
@@ -265,6 +274,8 @@ class Recurrence {
   bool get isNotValidDay => validDay == null;
 
   DateTime? get nextValidDay {
+    if (this.nextOccurrenceAt != null) return this.nextOccurrenceAt;
+
     final _instances = _getRRuleInstances();
 
     return _instances
@@ -392,11 +403,11 @@ class Recurrence {
   }
 
   factory Recurrence.fromMap(
-    Map<String, dynamic> map,
-  ) {
+      Map<String, dynamic> map, DateTime? nextOccurrenceAt) {
     return Recurrence(
       pattern: Pattern.fromMap(map['pattern']),
       range: Range.fromMap(map['range']),
+      nextOccurrenceAt: nextOccurrenceAt,
     );
   }
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart' show describeEnum;
-import 'package:get/state_manager.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
-import 'package:rrule/rrule.dart';
 import 'package:vizmo_models/models/parse_schemas/visitor_type_schema.dart';
 import 'package:vizmo_models/utils/extension_utils.dart';
+import 'package:vizmo_models/utils/utils.dart';
 
 import '../attendee.dart';
 import '../enum.dart';
@@ -52,7 +51,7 @@ class InviteSchema extends ParseObject {
   static String approvalKey = 'approval';
   static String endDateKey = 'recurrence.range.endDate';
   static String startDateKey = 'recurrence.range.startDate';
-
+  static String nextOccurrenceAtKey = "nextOccurrenceAt";
   bool forApiRQ = true;
   static String hostEmailKey = 'host.email';
   static String hostidKey = 'host.id';
@@ -117,9 +116,9 @@ class InviteSchema extends ParseObject {
 
   set visitorType(ParseVisitorType? type) =>
       set<Map<String, dynamic>?>(visitorTypeKey, type?.toMap());
-
-  Recurrence? get recurrence =>
-      Recurrence.fromMap(get<Map<String, dynamic>>(recurrenceKey) ?? {});
+  DateTime? get nextOccurrenceAt => Utils.getDateTime(get(nextOccurrenceAtKey));
+  Recurrence? get recurrence => Recurrence.fromMap(
+      get<Map<String, dynamic>>(recurrenceKey) ?? {}, nextOccurrenceAt);
 
   set recurrence(Recurrence? recurrence) =>
       set<Map<String, dynamic>?>(recurrenceKey, recurrence?.toMap());
@@ -175,52 +174,49 @@ class InviteSchema extends ParseObject {
       set<Map<String, dynamic>?>(approvalKey, approval?.toMap());
 
   Invite toInvite() {
-    final inviteesEmail = this
-            .attendees
+    final inviteesEmail = attendees
             ?.where((e) => e.email != null && e.email!.isNotEmpty)
             .map((e) => e.email!)
             .toList() ??
         [];
 
-    final inviteesPhone = this
-            .attendees
+    final inviteesPhone = attendees
             ?.where((e) => e.email != null && e.email!.isNotEmpty)
             .map((e) => e.email!)
             .toList() ??
         [];
 
     return Invite(
-      key: this.objectId,
-      cid: this.company?.objectId,
-      lid: this.location?.objectId,
-      approval: this.approval?.toApproval(),
-      comments: this.comments,
-      createdAt: this.createdAt,
-      createdBy: this.createdBy?.toHost(),
-      description: this.description,
+      key: objectId,
+      cid: company?.objectId,
+      lid: location?.objectId,
+      approval: approval?.toApproval(),
+      comments: comments,
+      createdAt: createdAt,
+      createdBy: createdBy?.toHost(),
+      description: description,
       emails: inviteesEmail,
-      attendees: this
-          .attendees
+      attendees: attendees
           ?.asMap()
           .map((key, value) => MapEntry(value.objectId!, value.toAttendee())),
-      host: this.host?.toHost(),
+      host: host?.toHost(),
       phoneNumbers: inviteesPhone,
-      recurrence: this.recurrence,
-      title: this.title,
-      visitorTypeKey: this.visitorType?.pointer?.objectId,
-      visitorType: this.visitorType?.name,
-      visitorTypeDisplayName: this.visitorType?.displayName,
+      recurrence: recurrence,
+      title: title,
+      visitorTypeKey: visitorType?.pointer?.objectId,
+      visitorType: visitorType?.name,
+      visitorTypeDisplayName: visitorType?.displayName,
     );
   }
 
   Future<void> fromInvite(
       Invite data, String cid, String lid, List<Attendee> attendees) async {
-    this.company = CompanySchema()..objectId = cid;
-    this.location = LocationSchema()..objectId = lid;
+    company = CompanySchema()..objectId = cid;
+    location = LocationSchema()..objectId = lid;
 
-    this.title = data.title ?? '${data.visitorTypeDisplayName} invite';
-    this.description = data.description;
-    this.comments = data.comments;
+    title = data.title ?? '${data.visitorTypeDisplayName} invite';
+    description = data.description;
+    comments = data.comments;
 
     // Invite update
     // for invite update save attendees before updating invite
@@ -228,8 +224,8 @@ class InviteSchema extends ParseObject {
       final _futures = attendees.map((e) async {
         if (e.id?.isEmpty ?? true) {
           final _schema = AttendeeSchema()
-            ..company = this.company
-            ..location = this.location
+            ..company = company
+            ..location = location
             ..firstName = e.firstName
             ..lastName = e.lastName
             ..email = e.email
@@ -259,8 +255,8 @@ class InviteSchema extends ParseObject {
     // for invite create send attendee as json
     this.attendees = attendees
         .map((e) => AttendeeSchema()
-          ..company = this.company
-          ..location = this.location
+          ..company = company
+          ..location = location
           ..firstName = e.firstName
           ..lastName = e.lastName
           ..email = e.email
@@ -270,16 +266,16 @@ class InviteSchema extends ParseObject {
           ..type = e.type)
         .toList();
 
-    this.createdBy = ParseHost.fromHost(data.createdBy!);
-    this.source = SourceEnum.vizmopass;
+    createdBy = ParseHost.fromHost(data.createdBy!);
+    source = SourceEnum.vizmopass;
 
-    this.visitorType = ParseVisitorType(
+    visitorType = ParseVisitorType(
       pointer: VisitorTypeSchema()..objectId = data.visitorTypeKey,
       name: data.visitorType,
       displayName: data.visitorTypeDisplayName,
     );
 
-    this.host = data.host != null
+    host = data.host != null
         ? ParseHost(
             pointer: EmployeeSchema()..objectId = data.host?.uid,
             name: data.host?.name,
@@ -287,6 +283,6 @@ class InviteSchema extends ParseObject {
           )
         : null;
 
-    this.recurrence = data.recurrence;
+    recurrence = data.recurrence;
   }
 }

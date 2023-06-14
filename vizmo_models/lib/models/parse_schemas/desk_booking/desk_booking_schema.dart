@@ -1,11 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
-import 'package:rrule/rrule.dart';
 import 'package:vizmo_models/models/desk_booking/desk.dart';
 import 'package:vizmo_models/models/desk_booking/desk_booking.dart';
 import 'package:vizmo_models/models/parse_schemas/desk_booking/desk_schema.dart';
 import 'package:vizmo_models/utils/extension_utils.dart';
+import 'package:vizmo_models/utils/utils.dart';
 import '../../invite.dart';
 import '../company_schema.dart';
 import '../location_schema.dart';
@@ -14,8 +13,7 @@ import 'enum.dart';
 import 'models.dart';
 
 class DeskBookingSchema extends ParseObject {
-  Rxn<RruleL10nEn>? rrulel10;
-  DeskBookingSchema({ParseHTTPClient? client, this.rrulel10})
+  DeskBookingSchema({ParseHTTPClient? client})
       : super(_className, client: client);
 
   static DeskBookingSchema fromObject(ParseObject object) {
@@ -31,6 +29,7 @@ class DeskBookingSchema extends ParseObject {
   static String createdByKey = 'createdBy';
   static String assignedToKey = 'assignedTo';
   static String statusKey = 'status';
+  static String nextOccurrenceAtKey = "nextOccurrenceAt";
 
   static String deskPointerKey = 'desk.pointer';
   static String startDate = 'recurrence.range.startDate';
@@ -71,12 +70,12 @@ class DeskBookingSchema extends ParseObject {
       set<Map<String, dynamic>?>(deskKey, desk?.toMap());
 
   Recurrence? get recurrence => Recurrence.fromMap(
-        get<Map<String, dynamic>>(recurrenceKey) ?? {},
-      );
+      get<Map<String, dynamic>>(recurrenceKey) ?? {}, this.nextOccurrenceAt);
 
   set recurrence(Recurrence? recurrence) =>
       set<Map<String, dynamic>?>(recurrenceKey, recurrence?.toMap());
 
+  /// UserSchema: createdBy should be user object instead of employee
   ParseHost? get createdBy {
     final _host = get<Map<String, dynamic>>(createdByKey);
     if (_host == null) return null;
@@ -101,6 +100,8 @@ class DeskBookingSchema extends ParseObject {
   set status(DeskBookingStatus? value) =>
       set<String?>(statusKey, value != null ? describeEnum(value) : null);
 
+  DateTime? get nextOccurrenceAt => Utils.getDateTime(get(nextOccurrenceAtKey));
+
   DeskBooking toDeskBooking({Desk? desk}) {
     return DeskBooking(
       id: this.objectId,
@@ -108,7 +109,7 @@ class DeskBookingSchema extends ParseObject {
       lid: this.location?.objectId,
       desk: this.desk?.toDesk(desk: desk),
       assignedTo: this.assignedTo?.toHost(),
-      createdBy: this.createdBy?.toHost(),
+      createdBy: this.createdBy,
       recurrence: this.recurrence,
       status: this.status,
     );
@@ -126,7 +127,7 @@ class DeskBookingSchema extends ParseObject {
       zone: _desk?.zone?.name,
     );
     this.assignedTo = ParseHost.fromHost(booking.assignedTo!);
-    this.createdBy = ParseHost.fromHost(booking.createdBy!);
+    this.createdBy = booking.createdBy;
     this.recurrence = booking.recurrence;
   }
 }
