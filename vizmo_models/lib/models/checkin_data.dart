@@ -10,11 +10,12 @@ import 'package:vizmo_models/models/visitor_type.dart'
 
 import 'accept_reject.dart' show AcceptReject;
 import 'attendee.dart' show Attendee;
+import 'base_model.dart';
 import 'checkin_field.dart' show CheckinField;
 import 'health_declaration.dart' show HealthDeclaration;
 import 'host.dart' show Host;
 
-class CheckinData {
+class CheckinData extends BaseModel {
   String? id;
   String? cid;
   String? lid;
@@ -58,27 +59,33 @@ class CheckinData {
 
   String? title;
 
-  CheckinData(
-      {this.id,
-      this.visitor,
-      this.host,
-      this.visitorType,
-      this.visitorTypeKey,
-      this.visitorAgreement,
-      this.visitorPhotoFile,
-      this.visitorAgreementData,
-      this.healthDeclaration,
-      this.checkinDate,
-      this.checkoutDate,
-      this.returningVisitor = false,
-      this.visitorIdCardType,
-      this.fields: const {},
-      this.acceptReject,
-      this.approval,
-      this.attendeeId,
-      this.iid,
-      this.attendee,
-      this.lid,
-      this.skippedHostSelection,
-      this.cid});
+  CheckinData({
+    this.id,
+    this.visitor,
+    this.host,
+    this.visitorType,
+    this.visitorTypeKey,
+    this.visitorAgreement,
+    this.visitorPhotoFile,
+    this.visitorAgreementData,
+    this.healthDeclaration,
+    this.checkinDate,
+    this.checkoutDate,
+    this.returningVisitor = false,
+    this.visitorIdCardType,
+    this.fields: const {},
+    this.acceptReject,
+    this.approval,
+    this.attendeeId,
+    this.iid,
+    this.attendee,
+    this.lid,
+    this.skippedHostSelection,
+    this.cid,
+    DateTime? createdAt,
+  })  : fields = <String, CheckinField>{},
+        super(
+          objectId: id,
+          createdAt: createdAt,
+        );
 }

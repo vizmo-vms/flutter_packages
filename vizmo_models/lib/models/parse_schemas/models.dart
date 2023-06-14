@@ -4,6 +4,7 @@ import 'package:vizmo_models/models/approval.dart';
 import 'package:vizmo_models/models/health_declaration.dart';
 import 'package:vizmo_models/models/host.dart';
 import 'package:vizmo_models/models/parse_schemas/employee_schema.dart';
+import 'package:vizmo_models/models/parse_schemas/user_schema.dart';
 import 'package:vizmo_models/models/parse_schemas/visitor_type_schema.dart';
 import 'package:vizmo_models/models/visitor_type.dart';
 import 'package:vizmo_models/utils/extension_utils.dart';
@@ -11,6 +12,7 @@ import 'package:vizmo_models/utils/utils.dart';
 
 import '../accept_reject.dart';
 import '../enum.dart';
+import '../profile.dart';
 
 class ParseVisitorType {
   ParseVisitorType({
@@ -154,17 +156,13 @@ class ParseApproval {
 }
 
 class ParseHost {
-  ParseHost({
-    this.pointer,
-    this.name,
-    this.email,
-    this.phone,
-  });
+  ParseHost({this.pointer, this.name, this.email, this.phone, this.user});
 
   final EmployeeSchema? pointer;
   final String? name;
   final String? email;
   final String? phone;
+  final UserSchema? user;
 
   Map<String, dynamic> toMap() {
     final _map = {
@@ -201,6 +199,14 @@ class ParseHost {
       name: host.name,
       phone: host.phone,
       pointer: EmployeeSchema()..objectId = host.uid,
+    );
+  }
+  factory ParseHost.fromUser(UserProfile user) {
+    return ParseHost(
+      email: user.email,
+      name: user.name,
+      phone: user.phone,
+      user: UserSchema()..objectId = user.uid,
     );
   }
 
