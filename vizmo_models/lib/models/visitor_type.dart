@@ -171,15 +171,16 @@ class Badge {
 }
 
 class HostScreen {
-  HostScreen({
-    this.displayText,
-    this.fallbackHost,
-    this.hostSelection,
-  });
+  HostScreen(
+      {this.displayText,
+      this.fallbackHost,
+      this.hostSelection,
+      this.skipHostSelection});
 
   final String? displayText;
   final Host? fallbackHost;
   final bool? hostSelection;
+  final bool? skipHostSelection;
 
   factory HostScreen.fromMap(Map<String, dynamic> map) {
     return HostScreen(
@@ -187,6 +188,7 @@ class HostScreen {
       fallbackHost:
           map['fallbackHost'] != null ? Host.parse(map['fallbackHost']) : null,
       hostSelection: map['hostSelection'] ?? true,
+      skipHostSelection: map['skipHostSelection'],
     );
   }
 }

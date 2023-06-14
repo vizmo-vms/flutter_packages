@@ -14,7 +14,7 @@ dependencies:
   rrule: 0.2.13 #All provided DateTimes must be in UTC
   contacts_service: 0.6.3
   get: 4.6.5
-  flutter_libphonenumber: 2.1.2
+  flutter_libphonenumber: 2.1.3
   another_brother:
     git:
       url: https://github.com/CodeMinion/another_brother.git

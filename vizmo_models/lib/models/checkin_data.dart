@@ -46,6 +46,7 @@ class CheckinData {
   ParseFile? visitorPhotoFile;
   ParseFile? visitorIdFile;
   String? sessionUrl;
+  bool? skippedHostSelection;
 
   ///Invite ID -  useful to know if this visitor is invited
 
@@ -78,5 +79,6 @@ class CheckinData {
       this.iid,
       this.attendee,
       this.lid,
+      this.skippedHostSelection,
       this.cid});
 }

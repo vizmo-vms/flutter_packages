@@ -68,6 +68,7 @@ class VisitorLogSchema extends ParseObject {
   static const String acceptRejectEnabledKey = "acceptReject.enabled";
   static const String acceptRejectStatusKey = "acceptReject.status";
   static const String approvalStatusKey = "approval.status";
+  static const String skippedHostSelectionKey = 'skippedHostSelection';
 
   CompanySchema? get company {
     var result = get(companyKey);
@@ -125,6 +126,8 @@ class VisitorLogSchema extends ParseObject {
     }
   }
 
+  set skippedHostSelection(bool skipped) =>
+      set(skippedHostSelectionKey, skipped);
   set invite(InviteSchema? value) {
     if (value != null) {
       set(inviteKey, value.toPointer());
@@ -211,6 +214,7 @@ class VisitorLogSchema extends ParseObject {
       name: data.visitorType?.name,
       displayName: data.visitorType?.displayName,
     );
+    this.skippedHostSelection = data.skippedHostSelection ?? false;
     this.checkinAt = DateTime.now();
     final _visitor = _Visitor(
       companyName: data.visitor?.company,
