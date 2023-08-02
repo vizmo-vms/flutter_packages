@@ -64,8 +64,8 @@ class ZoneSchema extends ParseObject {
         return FloorSchema()..fromJson(result);
       }).toList();
 
-  DeskZone toZone() {
-    return DeskZone(
+  ParseZone toZone() {
+    return ParseZone(
       id: this.objectId,
       cid: this.company?.objectId,
       lid: this.location?.objectId,

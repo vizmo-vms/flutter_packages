@@ -8,7 +8,7 @@ class Desk {
   final String? lid;
   final String? name;
   final String? description;
-  final DeskZone? zone;
+  final ParseZone? zone;
   final Floor? floor;
   final bool enabled;
   final ParseGeoPoint? position;

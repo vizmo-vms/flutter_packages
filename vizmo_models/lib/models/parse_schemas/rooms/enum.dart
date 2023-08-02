@@ -1,0 +1,1 @@
+enum RoomBookingStatus { CONFIRMED, CANCELLED }

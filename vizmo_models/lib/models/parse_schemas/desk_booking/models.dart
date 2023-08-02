@@ -91,7 +91,7 @@ class ParseDeskPointer {
       enabled: pointer?.enabled ?? desk?.enabled ?? false,
       floor:
           pointer?.floor?.toFloor() ?? desk?.floor ?? Floor(name: this.floor),
-      zone: pointer?.zone?.toZone() ?? desk?.zone ?? DeskZone(name: this.zone),
+      zone: pointer?.zone?.toZone() ?? desk?.zone ?? ParseZone(name: this.zone),
       position: pointer?.position ?? desk?.position,
     );
   }
