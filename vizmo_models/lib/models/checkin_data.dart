@@ -14,6 +14,7 @@ import 'base_model.dart';
 import 'checkin_field.dart' show CheckinField;
 import 'health_declaration.dart' show HealthDeclaration;
 import 'host.dart' show Host;
+import 'invite.dart';
 
 class CheckinData extends BaseModel {
   String? id;
@@ -43,7 +44,7 @@ class CheckinData extends BaseModel {
   ///Invite ID -  useful to know if this visitor is invited
   String? iid;
   bool? internal;
-
+  Invite? invite;
   ParseFile? visitorPhotoFile;
   ParseFile? visitorIdFile;
   String? sessionUrl;
@@ -84,6 +85,7 @@ class CheckinData extends BaseModel {
     this.lid,
     this.skippedHostSelection,
     this.cid,
+    this.invite,
     DateTime? createdAt,
   })  : fields = <String, CheckinField>{},
         super(

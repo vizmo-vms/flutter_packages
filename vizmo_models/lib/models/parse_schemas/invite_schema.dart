@@ -14,7 +14,7 @@ import 'location_schema.dart';
 import 'models.dart';
 
 class InviteSchema extends ParseObject {
-  InviteSchema({ParseHTTPClient? client}) : super(_className, client: client);
+  InviteSchema({ParseClient? client}) : super(_className, client: client);
 
   static InviteSchema fromObject(ParseObject object) {
     final InviteSchema _object =

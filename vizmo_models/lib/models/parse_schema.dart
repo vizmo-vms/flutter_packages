@@ -20,6 +20,7 @@ export 'parse_schemas/desk_booking/desk_schema.dart';
 export 'parse_schemas/desk_booking/floor_schema.dart';
 export 'parse_schemas/desk_booking/zone_schema.dart';
 export 'parse_schemas/desk_booking/models.dart';
+export 'parse_schemas/desk_booking/enum.dart';
 export 'parse_schemas/rooms/room_schema.dart';
 export 'parse_schemas/rooms/room_booking_schema.dart';
 export 'parse_schemas/rooms/amenities_schema.dart';

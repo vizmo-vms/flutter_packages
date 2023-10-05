@@ -19,6 +19,18 @@ import '../location_schema.dart';
 import '../models.dart';
 import 'enum.dart';
 
+import '../../../../utils/extension_utils.dart';
+import '../../../../utils/utils.dart';
+import '../../desk_booking/zone.dart';
+import '../../rooms/room.dart';
+import '../../rooms/room_booking.dart';
+import '../company_schema.dart';
+import '../desk_booking/enum.dart';
+import '../invite_schema.dart';
+import '../location_schema.dart';
+import '../models.dart';
+import 'enum.dart';
+
 class RoomBookingSchema extends ParseObject {
   RoomBookingSchema({ParseHTTPClient? client})
       : super(_className, client: client);
@@ -33,6 +45,7 @@ class RoomBookingSchema extends ParseObject {
   static String roomKey = 'room';
   static String recurrenceKey = 'recurrence';
   static String createdByKey = 'createdBy';
+  static String createdByEmailKey = 'createdBy.email';
   static String durationKey = 'duration';
   static String inviteKey = 'invite';
   static String statusKey = 'status';
@@ -41,6 +54,7 @@ class RoomBookingSchema extends ParseObject {
   static String roomPointerKey = 'room.pointer';
   static String startDate = 'recurrence.range.startDate';
   static String endDate = 'recurrence.range.endDate';
+  static String attendees = 'invite.attendees';
 
   CompanySchema? get company {
     var result = get(companyKey);

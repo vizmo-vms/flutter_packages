@@ -315,6 +315,7 @@ class VisitorLogSchema extends ParseObject {
       healthDeclaration: healthDeclaration?.toHealthDeclaration(),
       acceptReject: acceptReject?.toAcceptReject(),
       approval: approval?.toApproval(),
+      invite: this.invite?.toInvite(),
     )..visitor?.photo = this.photo;
   }
 }
