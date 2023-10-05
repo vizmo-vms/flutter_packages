@@ -15,7 +15,6 @@ export 'health_declaration.dart';
 export 'attendee.dart';
 export 'base_model.dart';
 export 'notification_payload.dart';
-export 'phoneNumber.dart';
 export 'plan.dart';
 export 'plans.dart';
 export 'printer.dart';
@@ -32,3 +31,7 @@ export 'country.dart';
 export 'checkin_data.dart';
 export 'checkin_field.dart';
 export 'get_arguments.dart';
+
+export 'rooms/amenities.dart';
+export 'rooms/room.dart';
+export 'rooms/room_booking.dart';
