@@ -1,6 +1,6 @@
 name: vizmo_models
 description: A new Flutter package project.
-version: 0.0.11
+version: 0.0.12
 homepage: https://github.com/vizmo-vms/flutter_packages/tree/main/vizmo_models
 publish_to: none
 environment:
@@ -15,11 +15,6 @@ dependencies:
   contacts_service: 0.6.3
   get: 4.6.5
   flutter_libphonenumber: 2.1.3
-  another_brother:
-    git:
-      url: https://github.com/CodeMinion/another_brother.git
-      ref: ios-no-type-b
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -12,8 +12,7 @@ export 'parse_schemas/models.dart';
 export 'parse_schemas/attendee_schema.dart';
 export 'parse_schemas/invite_schema.dart';
 export 'parse_schemas/plan_schema.dart';
-export 'parse_schemas/printer_schema.dart';
-export 'parse_schemas/printer_job_schema.dart';
+
 export 'parse_schemas/role_schema.dart';
 export 'parse_schemas/desk_booking/desk_booking_schema.dart';
 export 'parse_schemas/desk_booking/desk_schema.dart';

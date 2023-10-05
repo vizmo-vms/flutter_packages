@@ -17,8 +17,6 @@ export 'base_model.dart';
 export 'notification_payload.dart';
 export 'plan.dart';
 export 'plans.dart';
-export 'printer.dart';
-export 'printJob.dart';
 export 'role.dart';
 export 'settings.dart';
 export 'response.dart';
