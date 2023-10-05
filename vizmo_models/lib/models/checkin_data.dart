@@ -76,7 +76,7 @@ class CheckinData extends BaseModel {
     this.visitorIdCardType,
     this.visitorIdData,
     this.visitorPhotoData,
-    this.fields = const {},
+    this.fields = const <String, CheckinField>{},
     this.acceptReject,
     this.approval,
     this.attendeeId,
@@ -87,8 +87,7 @@ class CheckinData extends BaseModel {
     this.cid,
     this.invite,
     DateTime? createdAt,
-  })  : fields = <String, CheckinField>{},
-        super(
+  }) : super(
           objectId: id,
           createdAt: createdAt,
         );
