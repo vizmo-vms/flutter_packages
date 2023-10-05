@@ -29,6 +29,7 @@ class VisitorTypeSchema extends ParseObject {
   static const String idCardKey = "idCard";
   static const String photoKey = "photo";
   static const String settingsOverridesKey = "settingsOverrides";
+  static const String fallbackHost = 'hostScreen.fallbackHost';
 
   CompanySchema? get company {
     var result = get(companyKey);
