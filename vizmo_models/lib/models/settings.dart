@@ -22,6 +22,7 @@ class Settings {
     this.objectId,
     this.employeePassSettings,
     this.deskSettings,
+    this.roomSettings,
   });
 
   String? cid;
@@ -37,6 +38,7 @@ class Settings {
   CapacitySettings? capacitySettings;
   EmployeePassSettings? employeePassSettings;
   DeskSettings? deskSettings;
+  RoomSettings? roomSettings;
   DateTime? createdAt;
   DateTime? updatedAt;
   String? objectId;
@@ -519,6 +521,25 @@ class DeskSettings {
 
   factory DeskSettings.fromMap(Map<String, dynamic> map) {
     return DeskSettings(
+      enabled: (map['enabled'] ?? false) as bool,
+    );
+  }
+}
+
+class RoomSettings {
+  final bool enabled;
+  RoomSettings({
+    this.enabled = false,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'enabled': enabled,
+    };
+  }
+
+  factory RoomSettings.fromMap(Map<String, dynamic> map) {
+    return RoomSettings(
       enabled: (map['enabled'] ?? false) as bool,
     );
   }

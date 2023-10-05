@@ -145,6 +145,7 @@ class _Settings {
   _Approval? invite;
   _Approval? healthDeclaration;
   _Desk? desk;
+  _Room? room;
   _Notifications? notifications;
 
   _Settings.fromJson(Map<String, dynamic> json) {
@@ -160,9 +161,18 @@ class _Settings {
         ? new _Approval.fromJson(json['healthDeclaration'])
         : null;
     desk = json['desk'] != null ? new _Desk.fromJson(json['desk']) : null;
+    room = json['room'] != null ? new _Room.fromJson(json['room']) : null;
     notifications = json['notifications'] != null
         ? new _Notifications.fromJson(json['notifications'])
         : null;
+  }
+}
+
+class _Room {
+  bool? enabled;
+
+  _Room.fromJson(Map<String, dynamic> json) {
+    enabled = json['enabled'];
   }
 }
 
@@ -240,6 +250,7 @@ class _Limits {
   int? printer;
   int? visitorType;
   int? desk;
+  int? room;
 
   _Limits.fromJson(Map<String, dynamic> json) {
     employee = json['Employee'];
@@ -247,5 +258,6 @@ class _Limits {
     printer = json['Printer'];
     visitorType = json['VisitorType'];
     desk = json['Desk'];
+    room = json['Room'];
   }
 }

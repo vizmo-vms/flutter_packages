@@ -12,6 +12,6 @@ class ParseZone {
     this.cid,
     this.lid,
     this.name,
-    this.floors: const [],
+    this.floors = const [],
   });
 }

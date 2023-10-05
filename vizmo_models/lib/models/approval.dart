@@ -22,7 +22,7 @@ class Approval {
     this.approver,
     this.status,
     this.message,
-    this.approvers: const [],
+    this.approvers = const [],
   });
 
   Map<String, dynamic> toMap() {
@@ -86,7 +86,7 @@ class Approver {
     };
   }
 
-  factory Approver.fromMap(Map<String, dynamic> map, {bool isString: false}) {
+  factory Approver.fromMap(Map<String, dynamic> map, {bool isString = false}) {
     return Approver(
       name: map['name'],
       uid: map['uid'],

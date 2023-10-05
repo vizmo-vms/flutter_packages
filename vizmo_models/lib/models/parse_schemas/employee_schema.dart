@@ -6,9 +6,9 @@ import 'company_schema.dart';
 import 'location_schema.dart';
 
 class EmployeeSchema extends ParseObject {
-  EmployeeSchema() : super(_className);
+  EmployeeSchema() : super(className);
 
-  static const String _className = 'Employee';
+  static const String className = 'Employee';
 
   // company: { type: 'Pointer', targetClass: 'Company', required: true },
   //   location: { type: 'Pointer', targetClass: 'Location', required: true },

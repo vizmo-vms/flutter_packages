@@ -3300,9 +3300,10 @@ class Country {
   /// returns an country with the specified [isoCode] or ```null``` if
   /// none or more than 1 are found
   static findByDialingCode(String? dialingCode) {
-    return ALL.singleWhere(
-      (item) => item.dialingCode == dialingCode,
-    );
+    return ALL.singleWhere((item) => item.dialingCode == dialingCode,
+        orElse: () {
+      return Country.IN;
+    });
   }
 
   @override

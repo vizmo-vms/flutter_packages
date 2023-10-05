@@ -286,14 +286,16 @@ class Recurrence {
   }
 
   bool isValidOnDay(DateTime date) {
-    final _instances = _getRRuleInstances();
+    if (this.range?.startDate?.isAfter(date) ?? false) return false;
+    if (this.range?.endDate?.isBefore(date) ?? false) return false;
+    final _instances = _getRRuleInstances(date: date);
 
     return _instances?.any((instance) =>
             instance.calendarDate().compareTo(date.calendarDate()) == 0) ??
         false;
   }
 
-  Iterable<DateTime>? _getRRuleInstances() {
+  Iterable<DateTime>? _getRRuleInstances({DateTime? date}) {
     DateTime _startDate = this.range?.startDate ?? DateTime.now().toUtc();
     DateTime? _endDate = this.range?.endDate;
 
@@ -302,12 +304,16 @@ class Recurrence {
     // } else if (_startDate.calendarDate() == _endDate?.calendarDate()) {
     //   return [_startDate.toLocal()];
     // }
-
+    if (this.range?.numberOfOccurrences == -1 && _endDate == null) {
+      _endDate = _startDate.add(Duration(days: 365));
+    }
     final _rrule = rrule();
     return _rrule
         .getInstances(
           start: _startDate.isUtc ? _startDate : _startDate.toUtc(),
-          after: _startDate.isUtc ? _startDate : _startDate.toUtc(),
+          after: date != null
+              ? (date.isUtc ? date : date.toUtc())
+              : (_startDate.isUtc ? _startDate : _startDate.toUtc()),
           before: _endDate?.isUtc ?? true ? _endDate : _endDate?.toUtc(),
           includeBefore: true,
           includeAfter: true,
@@ -405,8 +411,8 @@ class Recurrence {
   factory Recurrence.fromMap(
       Map<String, dynamic> map, DateTime? nextOccurrenceAt) {
     return Recurrence(
-      pattern: Pattern.fromMap(map['pattern']),
-      range: Range.fromMap(map['range']),
+      pattern: map['pattern'] != null ? Pattern.fromMap(map['pattern']) : null,
+      range: map['range'] != null ? Range.fromMap(map['range']) : null,
       nextOccurrenceAt: nextOccurrenceAt,
     );
   }

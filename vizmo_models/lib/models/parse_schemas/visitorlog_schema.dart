@@ -227,6 +227,16 @@ class VisitorLogSchema extends ParseObject {
     if (data.visitor?.id?.isNotEmpty ?? false) {
       _visitor.pointer = VisitorSchema()..objectId = data.visitor?.id;
     }
+    if (data.visitorAgreementData?.isNotEmpty ?? false) {
+      try {
+        _visitor.agreement = ParseAgreement(
+          signedAt: DateTime.now(),
+          content: data.visitorAgreementData,
+        );
+      } catch (e) {
+        print("Error: $e");
+      }
+    }
 
     if (data.visitorAgreement != null) {
       try {
@@ -238,7 +248,7 @@ class VisitorLogSchema extends ParseObject {
     this.visitor = _visitor;
     if (data.host?.uid?.isNotEmpty ?? false) {
       this.host = ParseHost(
-        pointer: EmployeeSchema()..objectId = data.host?.uid,
+        employee: EmployeeSchema()..objectId = data.host?.uid,
         name: data.host?.name,
         email: data.host?.email,
       );

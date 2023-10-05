@@ -16,4 +16,21 @@ class Floor {
     this.description,
     this.layout,
   });
+  Floor copyWith({
+    String? id,
+    String? cid,
+    String? lid,
+    String? name,
+    String? description,
+    FloorLayout? layout,
+  }) {
+    return Floor(
+      id: id ?? this.id,
+      cid: cid ?? this.cid,
+      lid: lid ?? this.lid,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      layout: layout ?? this.layout,
+    );
+  }
 }

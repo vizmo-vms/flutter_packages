@@ -5,6 +5,8 @@ import 'package:vizmo_models/models/desk_booking/desk_booking.dart';
 
 import 'desk_booking/desk.dart';
 import 'invite.dart';
+import 'rooms/room.dart';
+import 'rooms/room_booking.dart';
 
 abstract class GetArguments {
   @protected
@@ -16,9 +18,11 @@ class InviteGetArguments implements GetArguments {
     // bool individual: false,
     Attendee? attendee,
     Invite? invite,
+    bool? isInviteEdit,
   }) : arguments = {
           'attendee': attendee,
           'invite': invite,
+          'isInviteEdit': isInviteEdit
         };
   Attendee? get attendee => arguments['attendee'];
 
@@ -27,6 +31,8 @@ class InviteGetArguments implements GetArguments {
   // }
 
   bool get individual => arguments['individual'] ?? false;
+
+  bool get isInviteEdit => arguments['isInviteEdit'] ?? false;
 
   // set selfRegister(bool selfRegister) {
   //   arguments['selfRegister'] = selfRegister;
@@ -78,6 +84,32 @@ class DeskGetArguments implements GetArguments {
   Desk? get desk => arguments['desk'];
   set desk(Desk? desk) {
     arguments['desk'] = desk;
+  }
+
+  @override
+  Map<String, dynamic> arguments = {};
+}
+
+class RoomGetArguments implements GetArguments {
+  RoomBooking? get roomBooking => arguments["roomBooking"];
+  set roomBooking(RoomBooking? roomBooking) {
+    arguments["roomBooking"] = roomBooking;
+  }
+
+  bool get selectVisitorMode => arguments["selectVisitorMode"] ?? false;
+  set selectVisitorMode(bool selectVisitorMode) {
+    arguments["selectVisitorMode"] = selectVisitorMode;
+  }
+
+  Room? get room => arguments['room'];
+  set room(Room? room) {
+    arguments['room'] = room;
+  }
+
+  bool get viewBookingDetails => arguments['viewBookingDetails'] ?? false;
+
+  set viewBookingDetails(bool viewBookingDetails) {
+    arguments['viewBookingDetails'] = viewBookingDetails;
   }
 
   @override

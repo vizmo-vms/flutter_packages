@@ -108,12 +108,17 @@ class ParseApproval {
   final EmployeeSchema? approver;
 
   Map<String, dynamic> toMap() {
-    return {
+    var _map = {
       'required': required,
       'status': status != null ? describeEnum(status!) : null,
       'message': message,
       'approver': approver?.toPointer(),
     };
+
+    if (_map['approver'] == null) {
+      _map.remove('approver');
+    }
+    return _map;
   }
 
   factory ParseApproval.fromMap(Map<String, dynamic> map) {
@@ -156,9 +161,9 @@ class ParseApproval {
 }
 
 class ParseHost {
-  ParseHost({this.pointer, this.name, this.email, this.phone, this.user});
+  ParseHost({this.employee, this.name, this.email, this.phone, this.user});
 
-  final EmployeeSchema? pointer;
+  final EmployeeSchema? employee;
   final String? name;
   final String? email;
   final String? phone;
@@ -166,7 +171,7 @@ class ParseHost {
 
   Map<String, dynamic> toMap() {
     final _map = {
-      'pointer': pointer?.toPointer(),
+      'pointer': (user ?? employee)?.toPointer(),
       'name': name,
       'email': email,
     };
@@ -181,16 +186,28 @@ class ParseHost {
   }
 
   factory ParseHost.fromMap(Map<String, dynamic> map) {
+    dynamic _pointer = map['pointer'];
+    EmployeeSchema? _employee;
+    UserSchema? _user;
+    if (_pointer != null) {
+      if (_pointer is ParseObject) {
+        if (_pointer.parseClassName == EmployeeSchema.className)
+          _employee = EmployeeSchema.fromObject(map['pointer']);
+        else if (_pointer.parseClassName == UserSchema.className)
+          _user = UserSchema.fromObject(map['pointer']);
+      } else if (_pointer is Map) {
+        if (_pointer[keyVarClassName] == EmployeeSchema.className)
+          _employee = EmployeeSchema().fromJson(map['pointer']);
+        else if (_pointer[keyVarClassName] == UserSchema.className)
+          _user = UserSchema().fromJson(map['pointer']);
+      }
+    }
     return ParseHost(
-      pointer: map['pointer'] == null
-          ? null
-          : map['pointer'] is ParseObject
-              ? EmployeeSchema.fromObject(map['pointer'])
-              : EmployeeSchema().fromJson(map['pointer']),
-      name: map['name'],
-      email: map['email'],
-      phone: map['phone'],
-    );
+        name: map['name'],
+        email: map['email'],
+        phone: map['phone'],
+        user: _user,
+        employee: _employee);
   }
 
   factory ParseHost.fromHost(Host host) {
@@ -198,7 +215,7 @@ class ParseHost {
       email: host.email,
       name: host.name,
       phone: host.phone,
-      pointer: EmployeeSchema()..objectId = host.uid,
+      employee: EmployeeSchema()..objectId = host.uid,
     );
   }
   factory ParseHost.fromUser(UserProfile user) {
@@ -212,16 +229,16 @@ class ParseHost {
 
   Host toHost() {
     return Host(
-      uid: this.pointer?.objectId,
-      cid: this.pointer?.company?.objectId,
-      lid: this.pointer?.location?.objectId,
-      firstName: this.pointer?.firstName,
-      lastName: this.pointer?.lastName,
-      email: this.pointer?.user?.email ?? this.email,
-      name: this.pointer?.user?.name ?? this.name,
-      phone: this.pointer?.user?.phone ?? this.phone,
-      department: this.pointer?.department,
-      designation: this.pointer?.designation,
+      uid: this.employee?.objectId,
+      cid: this.employee?.company?.objectId,
+      lid: this.employee?.location?.objectId,
+      firstName: this.employee?.firstName,
+      lastName: this.employee?.lastName,
+      email: this.employee?.user?.email ?? this.email,
+      name: this.employee?.user?.name ?? this.name,
+      phone: this.employee?.user?.phone ?? this.phone,
+      department: this.employee?.department,
+      designation: this.employee?.designation,
     );
   }
 }

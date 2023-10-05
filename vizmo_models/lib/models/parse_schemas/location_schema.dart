@@ -21,6 +21,7 @@ class LocationSchema extends ParseObject {
   static const String companyKey = 'company';
   static const String timezoneOffsetKey = 'timezoneOffset';
   static const String timezoneKey = 'timezone';
+  static const String countryCodeKey = "countryCode";
   // static const String subscriptionKey = 'subscription';
 
   ParseGeoPoint? get geoLocation => get<ParseGeoPoint>(geoLocationKey);
@@ -40,6 +41,7 @@ class LocationSchema extends ParseObject {
 
   int? get timezoneOffset => get<int>(timezoneOffsetKey);
   String? get timezone => get<String>(timezoneKey);
+  String? get countryCode => get<String>(countryCodeKey);
 
   Location toLocation() {
     return Location(
@@ -48,6 +50,6 @@ class LocationSchema extends ParseObject {
         name: this.name,
         companyName: this.companyName,
         address: this.address,
-        country: Country.findByIsoCode(this.company?.countryCode ?? 'IN'));
+        country: Country.findByIsoCode(this.countryCode ?? 'IN'));
   }
 }

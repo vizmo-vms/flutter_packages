@@ -15,7 +15,7 @@ class UserSchema extends ParseUser implements ParseCloneable {
   }) : super(username, password, emailAddress);
 
   // static const String _className = "_User";
-
+  static String get className => "_User";
   UserSchema.forQuery() : super.forQuery();
 
   String? get uid => this.objectId;

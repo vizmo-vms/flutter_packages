@@ -268,16 +268,16 @@ class InviteSchema extends ParseObject {
 
     createdBy = ParseHost.fromHost(data.createdBy!);
     source = SourceEnum.vizmopass;
-
-    visitorType = ParseVisitorType(
-      pointer: VisitorTypeSchema()..objectId = data.visitorTypeKey,
-      name: data.visitorType,
-      displayName: data.visitorTypeDisplayName,
-    );
+    if (data.visitorType != null)
+      visitorType = ParseVisitorType(
+        pointer: VisitorTypeSchema()..objectId = data.visitorTypeKey,
+        name: data.visitorType,
+        displayName: data.visitorTypeDisplayName,
+      );
 
     host = data.host != null
         ? ParseHost(
-            pointer: EmployeeSchema()..objectId = data.host?.uid,
+            employee: EmployeeSchema()..objectId = data.host?.uid,
             name: data.host?.name,
             email: data.host?.email,
           )

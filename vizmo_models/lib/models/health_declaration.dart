@@ -55,13 +55,11 @@ class HealthDeclaration {
   // If hd is filled, it should be valid (within 24 hours of upcoming event, we need to make this since we have re-declaration)
   // if hd is filled and not valid, then ask them to fill hd (CHANGE IN SCHEMA: Do not send declared at when sending healthDeclaration)
   // if hd is not filled, then ask them to fill hd (CHANGE IN SCHEMA: Do not send declared at when sending healthDeclaration)
-  bool get isNotValidHD {
-    if (isRejected) throw 'HealthDeclaration is rejected, Invalid invite';
-    return !(preFilled) ||
-        // this.approval?.status == null ||
-        (declaredAt == null ||
-            DateTime.now().difference(declaredAt!).inMinutes > (23 * 60 + 30));
-  }
+  bool get isNotValidHD =>
+      !(preFilled) ||
+      isNotApproved ||
+      (declaredAt == null ||
+          DateTime.now().difference(declaredAt!).inMinutes > (23 * 60 + 30));
 }
 
 class HealthDeclarationTemperature {

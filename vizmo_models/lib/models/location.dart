@@ -24,7 +24,7 @@ class Location {
     this.subscriptionStatus,
     this.sid,
     this.country,
-    this.timezone: 'Asia/Kolkata',
+    this.timezone = 'Asia/Kolkata',
   });
 
   // : assert(name != null),

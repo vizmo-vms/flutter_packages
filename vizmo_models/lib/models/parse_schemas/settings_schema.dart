@@ -21,6 +21,7 @@ class SettingsSchema extends ParseObject {
   static const String acceptRejectKey = "acceptReject";
   static const String healthDeclarationKey = "healthDeclaration";
   static const String deskKey = "desk";
+  static const String roomKey = "room";
 
   CompanySchema? get company {
     var result = get(companyKey);
@@ -71,6 +72,8 @@ class SettingsSchema extends ParseObject {
           get<Map<String, dynamic>>(healthDeclarationKey) ?? {});
   DeskSettings get desk =>
       DeskSettings.fromMap(get<Map<String, dynamic>>(deskKey) ?? {});
+  RoomSettings get room =>
+      RoomSettings.fromMap(get<Map<String, dynamic>>(roomKey) ?? {});
 
   Settings toSettings() {
     return new Settings(
@@ -84,6 +87,7 @@ class SettingsSchema extends ParseObject {
       inviteSettings: this.invite,
       notifications: this.notifications,
       deskSettings: this.desk,
+      roomSettings: this.room,
     );
   }
 }
