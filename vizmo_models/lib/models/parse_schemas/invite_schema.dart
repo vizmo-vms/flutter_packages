@@ -144,9 +144,7 @@ class InviteSchema extends ParseObject {
   set attendees(List<AttendeeSchema>? attendees) => set<List>(
       attendeesKey,
       attendees
-              ?.map((e) => (e.objectId?.isNotEmpty ?? false)
-                  ? e.toPointer()
-                  : e.toJson(full: true, forApiRQ: true))
+              ?.map((e) => e.toJson(full: true, forApiRQ: forApiRQ))
               .toList() ??
           []);
 
