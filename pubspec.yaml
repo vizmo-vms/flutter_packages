@@ -1,6 +1,6 @@
 name: vizmo_models
 description: A new Flutter package project.
-version: 0.0.12
+version: 0.0.13
 homepage: https://github.com/vizmo-vms/flutter_packages/tree/main/vizmo_widgets
 
 environment:
