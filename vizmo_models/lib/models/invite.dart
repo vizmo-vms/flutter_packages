@@ -259,7 +259,7 @@ class Recurrence {
 
   DateTime? get validDay {
     if (this.nextOccurrenceAt != null) {
-      return this.nextOccurrenceAt?.calendarDate() ==
+      return this.nextOccurrenceAt?.toLocal().calendarDate() ==
               DateTime.now().calendarDate()
           ? this.nextOccurrenceAt
           : null;
