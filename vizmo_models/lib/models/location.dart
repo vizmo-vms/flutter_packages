@@ -45,7 +45,7 @@ class Location {
   bool operator ==(covariant Location other) {
     if (identical(this, other)) return true;
 
-    return other.key == key;
+    return other.key == key && other.name == name;
   }
 
   @override
